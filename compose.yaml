@@ -1,0 +1,121 @@
+services:
+  redis:
+    container_name: redis_container
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    command: ["redis-server"]
+  # mongodb:
+  #   container_name: mongodb_container
+  #   image: mongo
+  #   restart: always
+  #   ports:
+  #     - 27017:27017
+  #   volumes:
+  #     - ./data/mongodb:/data/db
+  # mysql:
+  #   container_name: mysql_container
+  #   image: mysql
+  #   restart: always
+  #   ports:
+  #     - 3306:3306
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=jobber
+  #     - MYSQL_DATABASE=jobber_user
+  #     - MYSQL_USER=jobber
+  #     - MYSQL_PASSWORD=jobber
+  #   volumes:
+  #     - ./data/mysql:/var/lib/mysql
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      - POSTGRES_PASSWORD=jobber
+      - POSTGRES_USER=jobber
+      - POSTGRES_DB=jobber_reviews
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+  elasticsearch:
+    container_name: elasticsearch_container
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.16.1
+    restart: always
+    environment:
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    ports:
+      - 9200:9200
+    networks:
+      - elk-network
+  # volumes:
+  #   - ./data/es:/usr/share/elasticsearch/data
+
+  kibana:
+    depends_on:
+      - elasticsearch
+    container_name: kibana_container
+    image: docker.elastic.co/kibana/kibana:8.16.1
+    restart: always
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch_container:9200
+    ports:
+      - 5601:5601
+    networks:
+      - elk-network
+    volumes:
+      - ./kibana.yml/:/usr/share/kibana/config/kibana.yml:ro
+
+  rabbitmq:
+    container_name: rabbitmq_container
+    image: rabbitmq:4.1-rc-management-alpine
+    restart: always
+    ports:
+      # AMQP port
+      - 5672:5672
+      # DASHBOARD port
+      - 15672:15672
+    networks:
+      - rabbitmq-network
+    environment:
+      - RABBITMQ_DEFAULT_USER=jobber-user
+      - RABBITMQ_DEFAULT_PASS=jobber-pass
+  notifications:
+    container_name: notifications_container
+    build:
+      context: ./server/notification-service
+      dockerfile: Dockerfile.dev
+    env_file: "./server/jobber-shared/src/config.env"
+    # restart: always
+    environment:
+      - APM_START="0"
+      - ELASTIC_SEARCH_ENDPOINT=http://elasticsearch_container:9200
+      - RABBITMQ_ENDPOINT=amqp://jobber-user:jobber-pass@rabbitmq_container:5672
+      - NODE_ENV=development
+      - PORT=2001
+      - SENDER_EMAIL=gerson59@ethereal.email
+      - SENDER_PASS=xpNGZcnBsaZhrP6Sku
+      - SMTP_PORT=587
+      - PORT=5001
+      - HOST=smtp.ethereal.email
+      - APP_ICON=https://i.ibb.co/Kyp2m0t/cover.png
+      - CLIENT_URL=http://localhost:5173
+    depends_on:
+      - elasticsearch
+      - rabbitmq
+    networks:
+      - rabbitmq-network
+      - elk-network
+
+networks:
+  elk-network:
+    driver: bridge
+  rabbitmq-network:
+    driver: bridge

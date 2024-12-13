@@ -1,0 +1,10 @@
+FROM node:23-alpine3.20
+WORKDIR /app
+COPY src ./src
+COPY package.json ./
+COPY tsconfig.json ./
+COPY .npmrc ./
+RUN npm install && npm install nodemon -g && npm install @ronasunil/jobber-shared@1.0.21 && npm install -g ts-node
+
+EXPOSE 4001
+CMD [ "npm", "run", "start:dev" ]
