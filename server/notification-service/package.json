@@ -1,7 +1,7 @@
 {
   "name": "notification-service",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "start:dev": "nodemon -r tsconfig-paths/register src/app.ts",
     "build": "tsc  && tsc-alias -p tsconfig.json && ts-node src/tools/copyTemplates.ts",
