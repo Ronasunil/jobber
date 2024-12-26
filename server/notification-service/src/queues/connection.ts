@@ -19,7 +19,6 @@ export const rabbitmqConnection = async function (): Promise<
   Channel | undefined
 > {
   try {
-    console.log(config.RABBITMQ_ENDPOINT);
     const connection = await connect(config.RABBITMQ_ENDPOINT!);
     const channel = await connection.createChannel();
 

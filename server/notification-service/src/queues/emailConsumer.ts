@@ -1,12 +1,8 @@
 import { config } from "@notifications/config";
-import {
-  EmailAuth,
-  EmailLocals,
-  EmailOrder,
-} from "@notifications/interfaces/emailInterface";
-import { winstonLogger } from "@ronasunil/jobber-shared";
+
 import { Channel, ConsumeMessage } from "amqplib";
 import { sendEmail } from "./emails/mailTransporter";
+import { EmailAuth, EmailLocals, EmailOrder } from "@ronasunil/jobber-shared";
 
 export const emailAuthConsumer = async function (
   channel: Channel

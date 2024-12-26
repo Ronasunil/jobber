@@ -15,15 +15,20 @@ const logger = winstonLogger(
   "info"
 );
 
-export const start = function (app: Application) {
-  httpServer(app);
-  startElasticSearch();
-  startRabbitMq();
+export const start = async function (app: Application) {
+  startServer(app);
+  await startElasticSearch();
+  await startRabbitMq();
 };
 
-const httpServer = function (app: Application): void {
+const httpServer = function (app: Application): Server {
   const server = new Server(app);
-  server.listen(config.PORT, 5001, () => {
+  return server;
+};
+
+const startServer = function (app: Application) {
+  const server = httpServer(app);
+  server.listen(config.PORT, () => {
     logger.info("Notification service server started");
   });
 };
@@ -40,18 +45,4 @@ const startRabbitMq = async function name() {
       "Notification service:rabbitmqConnection()"
     );
   emailAuthConsumer(channel);
-
-  const message = JSON.stringify({
-    receiverEmail: config.SENDER_EMAIL,
-    resetLink: "",
-    template: "verifyEmail",
-    username: "rona",
-    verifyLink: "",
-  });
-  await channel.assertExchange("email-auth-notifications", "direct");
-  channel.publish(
-    "email-auth-notifications",
-    "email-auth",
-    Buffer.from(message)
-  );
 };

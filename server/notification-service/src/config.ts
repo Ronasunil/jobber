@@ -1,7 +1,6 @@
 import { BadRequest } from "@ronasunil/jobber-shared";
 import dotenv from "dotenv";
 import path from "path";
-import { EmailLocals } from "./interfaces/emailInterface";
 
 class Config {
   public APM_START: string | undefined;
@@ -31,7 +30,7 @@ class Config {
     this.APP_ICON = process.env.APP_ICON;
     this.CLIENT_URL = process.env.CLIENT_URL;
 
-    // this.validateConfig();
+    this.validateConfig();
   }
 
   private loadConfig() {
