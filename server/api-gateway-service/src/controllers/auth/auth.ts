@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 
 import {
-  authAxios,
   currentUser,
   resendVerificationMail,
   signin,

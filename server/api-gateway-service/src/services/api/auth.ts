@@ -1,7 +1,8 @@
 import { config } from "@gateway/Config";
-import { axiosInstance } from "@gateway/services/api/axios";
+
 import { AuthRequestPayload } from "@ronasunil/jobber-shared";
 import { AxiosResponse } from "axios";
+import { axiosInstance } from "@gateway/services/axios";
 
 export const authAxios = axiosInstance(`${config.AUTH_SERVICE_URL!}/api/v1`);
 
