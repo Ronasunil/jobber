@@ -1,6 +1,7 @@
 import { Client } from "@elastic/elasticsearch";
 import { config } from "@auth/Config";
 import { winstonLogger } from "@ronasunil/jobber-shared";
+import { GigAttrs } from "./interfaces/gigInterface";
 
 const logger = winstonLogger(
   config.ELASTIC_SEARCH_ENDPOINT!,
@@ -16,9 +17,10 @@ const connectToElasticsearch = function (): Client {
   return client;
 };
 
+export const client = connectToElasticsearch();
+
 export const retryElasticSearchConnection = async function () {
   let isConnected = false;
-  const client = connectToElasticsearch();
 
   while (!isConnected) {
     try {
@@ -31,5 +33,31 @@ export const retryElasticSearchConnection = async function () {
       if (err instanceof Error) logger.error(err.message, err);
       else logger.error("Unknown error", err);
     }
+  }
+};
+
+const checkIndexExist = async function (indexName: string): Promise<boolean> {
+  const indexFound = await client.indices.exists({ index: indexName });
+
+  return indexFound;
+};
+
+export const createIndex = async function (indexName: string) {
+  try {
+    const indexFound = await checkIndexExist(indexName);
+    if (indexFound) return logger.info(`Index:${indexName} already exists`);
+    await client.indices.create({ index: indexName });
+    await client.indices.refresh({ index: indexName });
+  } catch (err) {
+    logger.error(`Can't create index:${indexName}`, err);
+  }
+};
+
+export const searchGigById = async function (index: string, id: string) {
+  try {
+    const gig = await client.get({ index, id });
+    return gig._source as GigAttrs;
+  } catch (err) {
+    logger.error("Failed getting gig from searchGigById(): authservice", err);
   }
 };

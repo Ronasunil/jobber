@@ -1,4 +1,4 @@
-import { Model, Optional } from "sequelize";
+import { Optional } from "sequelize";
 
 export interface AuthAttrs {
   id?: number;
@@ -13,8 +13,6 @@ export interface AuthAttrs {
   profilePhoto?: string;
   country: string;
   publicId?: string;
-  comparePassword?(password: string, hash: string): Promise<boolean>;
-  hashPassword?(password: string): Promise<string>;
 }
 
 export interface AuthInput {
@@ -40,13 +38,6 @@ export interface AuthDoc {
   profilePhoto: string;
   country: string;
   publicId: string;
-}
-
-export interface AuthModelInstanceMethods extends Model {
-  prototype: {
-    comparePassword(password: string, hash: string): Promise<boolean>;
-    hashPassword(password: string): Promise<string>;
-  };
 }
 
 export type AuthCreationAttr = Optional<

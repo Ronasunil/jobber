@@ -9,14 +9,15 @@ import { config } from "@auth/Config";
 import { handleError } from "@auth/error/errorHandler";
 import { appRoutes } from "@auth/routes";
 import { start } from "@auth/server";
+import { createIndex } from "./elasticsearch";
 
-const initApp = function (): Application {
+const initApp = async function (): Promise<Application> {
   const app = express();
 
   middlewares(app);
   routes(app);
   errorHandler(app);
-
+  await createIndex("gigs");
   start(app);
 
   return app;

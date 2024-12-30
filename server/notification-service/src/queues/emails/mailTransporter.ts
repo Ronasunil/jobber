@@ -1,6 +1,6 @@
 import { config } from "@notifications/config";
-import { EmailLocals } from "@notifications/interfaces/emailInterface";
-import { winstonLogger } from "@ronasunil/jobber-shared";
+
+import { EmailLocals, winstonLogger } from "@ronasunil/jobber-shared";
 import Email from "email-templates";
 import nodemailer, { Transporter } from "nodemailer";
 import path from "path";

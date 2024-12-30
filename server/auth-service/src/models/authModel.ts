@@ -2,11 +2,7 @@ import { DataTypes, Model, ModelDefined } from "sequelize";
 import { hash, compare } from "bcrypt";
 
 import { sequelize } from "@auth/db";
-import {
-  AuthCreationAttr,
-  AuthDoc,
-  AuthModelInstanceMethods,
-} from "@auth/interfaces/authInterface";
+import { AuthCreationAttr, AuthDoc } from "@auth/interfaces/authInterface";
 import { config } from "@auth/Config";
 
 const SALT_ROUND = 12;
@@ -95,7 +91,7 @@ const AuthModel: ModelDefined<AuthDoc, AuthCreationAttr> = sequelize.define(
       },
     ],
   }
-) as ModelDefined<AuthDoc, AuthCreationAttr> & AuthModelInstanceMethods;
+) as ModelDefined<AuthDoc, AuthCreationAttr>;
 
 AuthModel.addHook("beforeCreate", async function (model: Model<AuthDoc>) {
   const password = model.dataValues.password;

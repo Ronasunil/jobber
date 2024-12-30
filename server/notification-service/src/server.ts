@@ -7,8 +7,6 @@ import { rabbitmqConnection } from "@notifications/queues/connection";
 import { Application } from "express";
 import { emailAuthConsumer } from "./queues/emailConsumer";
 
-console.log(config.APM_START, config.ELASTIC_SEARCH_ENDPOINT);
-
 const logger = winstonLogger(
   config.ELASTIC_SEARCH_ENDPOINT!,
   "notificationService",

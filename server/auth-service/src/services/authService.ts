@@ -1,6 +1,5 @@
 import { AuthCreationAttr, AuthDoc } from "@auth/interfaces/authInterface";
 import { AuthModel } from "@auth/models/authModel";
-import { AuthRequestPayload } from "@ronasunil/jobber-shared";
 
 import { Op } from "sequelize";
 
