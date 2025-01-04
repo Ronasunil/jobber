@@ -20,6 +20,8 @@ import { handleInvalidRoute, handleError } from "@gateway/error/errorHandler";
 import { config } from "@gateway/Config";
 import { authAxios } from "@gateway/services/api/auth";
 import { appRoutes } from "@gateway/routes";
+import { buyerAxios } from "./services/api/buyer";
+import { sellerAxios } from "./services/api/seller";
 
 const initApp = function (): Application {
   const app = express();
@@ -67,11 +69,14 @@ const corsMiddleware = function (app: Application) {
 
 const passTokenMiddleware = function (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ) {
-  if (req.session?.jwt)
+  if (req.session?.jwt) {
     authAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
+    buyerAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
+    sellerAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
+  }
 
   next();
 };

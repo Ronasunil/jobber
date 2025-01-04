@@ -25,11 +25,3 @@ const startServer = function (app: Application) {
     logger.info(`gateway service is running on port:${config.PORT}`);
   });
 };
-
-process.on("uncaughtException", (err) => {
-  console.log(err);
-});
-
-process.on("unhandledRejection", (err) => {
-  console.log(err);
-});

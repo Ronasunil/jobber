@@ -11,6 +11,7 @@ class Config {
   public API_GATEWAY_HEADER: string | undefined;
   public JWT_SECRET: string | undefined;
   public AUTH_SERVICE_URL: string | undefined;
+  public USER_SERVICE_URL: string | undefined;
 
   constructor() {
     this.loadEnv();
@@ -22,6 +23,7 @@ class Config {
     this.AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL;
     this.API_GATEWAY_HEADER = process.env.API_GATEWAY_HEADER;
     this.JWT_SECRET = process.env.JWT_SECRET;
+    this.USER_SERVICE_URL = process.env.USER_SERVICE_URL;
     this.validateEnv();
   }
 

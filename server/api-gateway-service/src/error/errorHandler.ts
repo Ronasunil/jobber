@@ -24,6 +24,6 @@ export const handleError = function (
   res: Response,
   _next: NextFunction
 ) {
-  logger.error(err.message);
+  console.log(err);
   res.status(400).json({ status: "error", message: err.message });
 };
