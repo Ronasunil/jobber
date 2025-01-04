@@ -9,7 +9,7 @@ import {
   updatePasswordResetToken,
 } from "@auth/services/authService";
 import { BadRequest, EmailAuth, Payload } from "@ronasunil/jobber-shared";
-import { addHalfHour, generateToken, getBasePath } from "@auth/utils/helpers";
+import { addHalfHour } from "@auth/utils/helpers";
 import { AuthDoc } from "@auth/interfaces/authInterface";
 import { config } from "@auth/Config";
 import { publishDirectMessage } from "@auth/queues/authProducer";
@@ -25,7 +25,7 @@ declare global {
 }
 
 const getEmailLocals = function (user: AuthDoc, token: string) {
-  const basePath = getBasePath();
+  const basePath = "/api/v1/auth";
   const locals: EmailAuth = {
     receiverEmail: user.email,
     resetLink: `http://localhost:${config.PORT}${basePath}/password/reset/${token}?email=${user.email}`,

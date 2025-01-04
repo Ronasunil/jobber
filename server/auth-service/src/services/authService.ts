@@ -1,12 +1,24 @@
 import { AuthCreationAttr, AuthDoc } from "@auth/interfaces/authInterface";
 import { AuthModel } from "@auth/models/authModel";
+import { publishDirectMessage } from "@auth/queues/authProducer";
+import { authChannel } from "@auth/server";
+import { RabbitUserPayload } from "@ronasunil/jobber-shared";
 
 import { Op } from "sequelize";
 
 export const createAuthUser = async function (data: AuthCreationAttr) {
   const authUser = await AuthModel.create(data);
+  const { country, email, profilePhoto, username } = authUser.dataValues;
 
-  //TODO produce event for buyer creation
+  const msg: RabbitUserPayload = { country, email, profilePhoto, username };
+
+  await publishDirectMessage(
+    authChannel,
+    "buyer-create",
+    "create",
+    JSON.stringify(msg),
+    "create  event published createAuthUser():"
+  );
 
   return authUser.dataValues;
 };

@@ -1,59 +1,57 @@
 import express, { Application, json, urlencoded } from "express";
 import compression from "compression";
-import cors from "cors";
 import helmet from "helmet";
 import hpp from "hpp";
-import "express-async-errors";
+import cors from "cors";
 
-import { config } from "@auth/Config";
-import { handleError } from "@auth/error/errorHandler";
-import { appRoutes } from "@auth/routes";
-import { start } from "@auth/server";
+import { config } from "@user/Config";
+import { handleInvalidRoute, handleError } from "@user/errors/errorHandler";
+import { start } from "@user/server";
+import { userRoutes } from "./routes";
 
-const initApp = async function (): Promise<Application> {
+const initApp = function () {
   const app = express();
+
+  start(app);
 
   middlewares(app);
   routes(app);
   errorHandler(app);
-
-  start(app);
-
-  return app;
 };
 
-const globalMiddleware = function (app: Application) {
+const securityMiddlewares = function (app: Application) {
+  app.use(helmet());
+  app.use(hpp());
+};
+
+const globalMiddlewares = function (app: Application) {
   app.use(compression());
   app.use(json({ limit: "50mb" }));
   app.use(urlencoded({ extended: true, limit: "50mb" }));
 };
 
-const securityMiddleware = function (app: Application) {
-  app.use(helmet());
-  app.use(hpp());
-};
-
 const corsMiddleware = function (app: Application) {
   app.use(
     cors({
-      origin: config.API_GATEWAY_ENDPOINT,
-      methods: ["GET", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
       credentials: true,
+      methods: ["GET", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+      origin: config.API_GATEWAY_ENDPOINT,
     })
   );
 };
 
 const middlewares = function (app: Application) {
   corsMiddleware(app);
-  securityMiddleware(app);
-  globalMiddleware(app);
+  globalMiddlewares(app);
+  securityMiddlewares(app);
 };
 
 const routes = function (app: Application) {
-  appRoutes(app);
+  userRoutes(app);
 };
 
 const errorHandler = function (app: Application) {
+  app.all("*", handleInvalidRoute);
   app.use(handleError);
 };
 

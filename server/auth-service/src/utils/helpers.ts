@@ -1,6 +1,5 @@
 import { config } from "@auth/Config";
 import { AuthDoc } from "@auth/interfaces/authInterface";
-import { EmailAuth } from "@ronasunil/jobber-shared";
 import { randomBytes } from "crypto";
 import { addMinutes } from "date-fns";
 import { sign } from "jsonwebtoken";
@@ -29,8 +28,4 @@ export const addHalfHour = function (): Date {
   const futureTime = addMinutes(now, 30);
 
   return futureTime;
-};
-
-export const getBasePath = function () {
-  return "/api/v1/auth";
 };

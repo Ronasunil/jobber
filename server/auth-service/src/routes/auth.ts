@@ -5,14 +5,13 @@ import {
   signup,
   currentUser,
 } from "@auth/controllers/auth";
-import { loginSchema, signupSchema } from "@auth/schemes/authSchema";
-import { getBasePath } from "@auth/utils/helpers";
+import { loginSchema, signupSchema } from "@auth/schemas/authSchema";
 import { gatewayMiddleware, validateJoi } from "@ronasunil/jobber-shared";
 import { Router } from "express";
 
 export const authRoutes = function (): Router {
   const router = Router();
-  const basePath = getBasePath();
+  const basePath = "/api/v1/auth";
 
   router.post(
     `${basePath}/signup`,

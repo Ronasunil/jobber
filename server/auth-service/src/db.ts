@@ -10,7 +10,6 @@ const logger = winstonLogger(
 );
 
 const getSequelize = function (): Sequelize {
-  console.log(config.MYSQL_DB);
   const sequlize = new Sequelize(config.MYSQL_DB!, {
     logging: false,
     dialectOptions: {

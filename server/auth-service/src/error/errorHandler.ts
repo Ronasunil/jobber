@@ -16,7 +16,6 @@ export const handleError = function (
   _next: NextFunction
 ) {
   if (err instanceof CustomError) {
-    console.log(err.formatError());
     res.status(err.statusCode).json(err.formatError());
     return;
   }

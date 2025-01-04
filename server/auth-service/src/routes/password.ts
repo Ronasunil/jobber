@@ -7,14 +7,14 @@ import {
   changePasswordSchema,
   emailSchema,
   newPasswordSchema,
-} from "@auth/schemes/passwordSchema";
-import { getBasePath } from "@auth/utils/helpers";
+} from "@auth/schemas/passwordSchema";
+
 import { gatewayMiddleware, validateJoi } from "@ronasunil/jobber-shared";
 import { Router } from "express";
 
 export const passwordRoutes = function (): Router {
   const passwordRouter = Router();
-  const basePath = getBasePath();
+  const basePath = "/api/v1/auth";
 
   passwordRouter.patch(
     `${basePath}/password`,

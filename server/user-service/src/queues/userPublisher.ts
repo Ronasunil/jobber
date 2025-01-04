@@ -1,23 +1,26 @@
-import { config } from "@auth/Config";
 import { winstonLogger } from "@ronasunil/jobber-shared";
+import { config } from "@user/Config";
 import { Channel } from "amqplib";
 
 const logger = winstonLogger(
   config.ELASTIC_SEARCH_ENDPOINT!,
-  "auth service",
+  "Auth service",
   "info"
 );
-
 export const publishDirectMessage = async function (
   channel: Channel,
   exchangeKey: string,
   routingKey: string,
-  message: string,
+  msg: string,
   log: string
 ) {
   try {
-    await channel.assertExchange(exchangeKey, "direct");
-    channel.publish(exchangeKey, routingKey, Buffer.from(message));
+    await channel.assertExchange(exchangeKey, "direct", {
+      durable: true,
+      autoDelete: false,
+    });
+
+    channel.publish(exchangeKey, routingKey, Buffer.from(msg));
     logger.info(log);
   } catch (err) {
     logger.error(

@@ -11,7 +11,10 @@ export const emailAuthConsumer = async function (
   const routingKey = "email-auth";
   const queueName = "email-auth-queue";
 
-  await channel.assertExchange(exchangeKey, "direct");
+  await channel.assertExchange(exchangeKey, "direct", {
+    durable: true,
+    autoDelete: false,
+  });
   const queue = await channel.assertQueue(queueName, {
     durable: true,
     autoDelete: false,
