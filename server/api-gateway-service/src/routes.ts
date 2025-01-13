@@ -5,6 +5,8 @@ import { passwordRoutes } from "@gateway/routes/auth/password";
 import { searchRoutes } from "./routes/auth/search";
 import { buyerRoutes } from "./routes/user/buyer";
 import { sellerRoutes } from "./routes/user/seller";
+import { commandRoutes } from "./routes/gig/commandRoutes";
+import { queriesRoutes } from "./routes/gig/queriesRoutes";
 
 export const appRoutes = function (app: Application) {
   const healthRouter = healthRoute();
@@ -13,6 +15,8 @@ export const appRoutes = function (app: Application) {
   const searchRouter = searchRoutes();
   const buyerRouter = buyerRoutes();
   const sellerRouter = sellerRoutes();
+  const gigsCommandRouter = commandRoutes();
+  const gigsQueriesROuter = queriesRoutes();
 
   app.use("/", healthRouter);
   app.use("/gateway", authRouter);
@@ -20,4 +24,6 @@ export const appRoutes = function (app: Application) {
   app.use("/gateway", searchRouter);
   app.use("/gateway", buyerRouter);
   app.use("/gateway", sellerRouter);
+  app.use("/gateway", gigsCommandRouter);
+  app.use("/gateway", gigsQueriesROuter);
 };

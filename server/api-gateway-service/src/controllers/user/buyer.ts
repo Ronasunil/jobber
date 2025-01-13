@@ -19,7 +19,6 @@ export const username = helpers.asyncWrapper(async function (
   req: Request,
   _res: Response
 ) {
-  console.log("get");
   const { username } = req.params;
   const result = await getBuyerByUsername(username);
 

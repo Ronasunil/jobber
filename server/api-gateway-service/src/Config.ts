@@ -12,6 +12,8 @@ class Config {
   public JWT_SECRET: string | undefined;
   public AUTH_SERVICE_URL: string | undefined;
   public USER_SERVICE_URL: string | undefined;
+  public REDIS_HOST: string | undefined;
+  public GIG_SERVICE_URL: string | undefined;
 
   constructor() {
     this.loadEnv();
@@ -24,6 +26,8 @@ class Config {
     this.API_GATEWAY_HEADER = process.env.API_GATEWAY_HEADER;
     this.JWT_SECRET = process.env.JWT_SECRET;
     this.USER_SERVICE_URL = process.env.USER_SERVICE_URL;
+    this.REDIS_HOST = process.env.REDIS_HOST;
+    this.GIG_SERVICE_URL = process.env.GIG_SERVICE_URL;
     this.validateEnv();
   }
 

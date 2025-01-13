@@ -20,8 +20,9 @@ import { handleInvalidRoute, handleError } from "@gateway/error/errorHandler";
 import { config } from "@gateway/Config";
 import { authAxios } from "@gateway/services/api/auth";
 import { appRoutes } from "@gateway/routes";
-import { buyerAxios } from "./services/api/buyer";
-import { sellerAxios } from "./services/api/seller";
+import { buyerAxios } from "@gateway/services/api/buyer";
+import { sellerAxios } from "@gateway/services/api/seller";
+import { gigAxios } from "@gateway/services/api/gig";
 
 const initApp = function (): Application {
   const app = express();
@@ -76,6 +77,7 @@ const passTokenMiddleware = function (
     authAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
     buyerAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
     sellerAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
+    gigAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
   }
 
   next();

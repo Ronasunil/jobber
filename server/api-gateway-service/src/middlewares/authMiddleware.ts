@@ -7,6 +7,7 @@ import {
 } from "@ronasunil/jobber-shared";
 import { config } from "@gateway/Config";
 import { checkUserExist } from "@gateway/grpc/authClient";
+import { checkUserIsSeller } from "@gateway/grpc/sellerClient";
 
 declare global {
   namespace Express {
@@ -68,5 +69,20 @@ export const checkUserExistance = function (
       "checkUserExistance(): gateway service"
     );
 
+  next();
+};
+
+export const verifyUserSellerStatus = function (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) {
+  const seller = checkUserIsSeller(req.currentUser!.id);
+
+  if (!seller)
+    throw new BadRequest(
+      "User is not a seller",
+      "verifyUserStatus(): gateway service"
+    );
   next();
 };
