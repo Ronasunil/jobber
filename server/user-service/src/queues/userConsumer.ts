@@ -1,6 +1,7 @@
 import { RabbitUserPayload } from "@ronasunil/jobber-shared";
 import { createBuyer } from "@user/services/buyerService";
 import {
+  addSellerReview,
   cancelJob,
   sellerJobCompleted,
   updateOngoingJob,
@@ -106,5 +107,30 @@ export const sellerJobConsumer = async function (channel: Channel) {
   });
 };
 
-// TODO
-const reviewConsumer = function (channel: Channel) {};
+export const ratingsConsumer = async function (channel: Channel) {
+  const exchangeKey = "seller-review";
+  const routingKey = "add";
+  const queueName = "sellere-review";
+
+  await channel.assertExchange(exchangeKey, "direct", {
+    durable: true,
+    autoDelete: false,
+  });
+
+  const queue = await channel.assertQueue(queueName, {
+    durable: true,
+    autoDelete: false,
+  });
+
+  await channel.bindQueue(queue.queue, exchangeKey, routingKey);
+
+  channel.consume(queue.queue, async (msg: ConsumeMessage | null) => {
+    if (!msg?.content) return;
+    const { ratingCount, sellerId } = JSON.parse(msg.content.toString()) as {
+      sellerId: string;
+      ratingCount: number;
+    };
+
+    await addSellerReview(sellerId, ratingCount);
+  });
+};

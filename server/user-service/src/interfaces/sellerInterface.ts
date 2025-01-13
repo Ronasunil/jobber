@@ -19,7 +19,7 @@ export interface SellerDoc extends mongoose.Document {
   oneLiner: string;
   experience: Experience[];
   ratingsCount: number;
-  ratingsCategories: RatingCategories[];
+  ratingsCategories: RatingCategories;
   education: Education[];
   certificate: Certificate[];
   responseTime: number;

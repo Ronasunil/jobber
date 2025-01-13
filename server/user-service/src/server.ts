@@ -2,13 +2,14 @@ import { Application } from "express";
 import { Server } from "http";
 import { config } from "@user/Config";
 import { BadRequest, winstonLogger } from "@ronasunil/jobber-shared";
-import { connectToMongodb } from "./db";
+import { connectToMongodb } from "@user/db";
 import { connectToRabbitmq } from "@user/queues/connection";
-import { retryElasticSearchConnection } from "./elasticsearch";
+import { retryElasticSearchConnection } from "@user/elasticsearch";
 import {
   sellerJobConsumer,
   userBuyerCreateConsumer,
 } from "./queues/userConsumer";
+import { startGrpcuserServer } from "@user/grpc/userServer";
 
 const logger = winstonLogger(
   config.ELASTIC_SEARCH_ENDPOINT!,
@@ -22,6 +23,7 @@ export const start = async function (app: Application) {
   await dbConnection();
   await rabbitmqConnection();
   await elasticsearchConnection();
+  await startGrpc();
 };
 
 const httpServer = function (app: Application) {
@@ -49,6 +51,14 @@ const rabbitmqConnection = async function () {
   await userBuyerCreateConsumer(channel);
   await sellerJobConsumer(channel);
   return channel;
+};
+
+const startGrpc = async function () {
+  try {
+    await startGrpcuserServer();
+  } catch (err) {
+    logger.error(err);
+  }
 };
 
 const elasticsearchConnection = async function () {
