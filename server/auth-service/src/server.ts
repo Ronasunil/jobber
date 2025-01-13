@@ -43,7 +43,7 @@ const rabbitmqConnection = async function () {
   if (!channel)
     throw new BadRequest(
       `Can't connect to rabbitmq rabbitmqConnection():`,
-      "rabbitmqConnection()"
+      "rabbitmqConnection() auth service"
     );
 
   authChannel = channel;

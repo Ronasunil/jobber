@@ -19,7 +19,7 @@
     "@faker-js/faker": "^9.3.0",
     "@grpc/grpc-js": "^1.12.5",
     "@grpc/proto-loader": "^0.7.13",
-    "@ronasunil/jobber-shared": "npm:@Ronasunil/jobber-shared@^1.2.21",
+    "@ronasunil/jobber-shared": "npm:@Ronasunil/jobber-shared@^1.3.0",
     "amqplib": "^0.10.5",
     "bcrypt": "^5.1.1",
     "compression": "^1.7.5",
@@ -48,5 +48,8 @@
     "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript-transform-paths": "^3.5.2"
+  },
+  "engines": {
+    "node": "22.12.0"
   }
 }

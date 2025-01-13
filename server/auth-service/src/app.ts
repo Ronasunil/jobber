@@ -6,7 +6,7 @@ import hpp from "hpp";
 import "express-async-errors";
 
 import { config } from "@auth/Config";
-import { handleError } from "@auth/error/errorHandler";
+import { handleError, handleInvalidRoute } from "@auth/error/errorHandler";
 import { appRoutes } from "@auth/routes";
 import { start } from "@auth/server";
 
@@ -54,6 +54,7 @@ const routes = function (app: Application) {
 };
 
 const errorHandler = function (app: Application) {
+  app.all("*", handleInvalidRoute);
   app.use(handleError);
 };
 

@@ -1,14 +1,14 @@
-import { CustomError, winstonLogger } from "@ronasunil/jobber-shared";
 import { NextFunction, Request, Response } from "express";
+import httpStatus from "http-status-codes";
 
-import { config } from "@auth/Config";
+import { CustomError, winstonLogger } from "@ronasunil/jobber-shared";
 
-const logger = winstonLogger(
-  config.ELASTIC_SEARCH_ENDPOINT!,
-  "Auth service",
-  "info"
-);
-
+export const handleInvalidRoute = function (req: Request, res: Response) {
+  const url = `${req.protocol}://${req.get("host")}:${req.originalUrl}`;
+  res
+    .status(httpStatus.NOT_FOUND)
+    .json({ message: `The requested url:${url} not found` });
+};
 export const handleError = function (
   err: Error,
   _req: Request,
@@ -19,7 +19,7 @@ export const handleError = function (
     res.status(err.statusCode).json(err.formatError());
     return;
   }
-  console.log("Auth service", err);
+  console.log("gig service", err);
   res
     .status(520)
     .json({ status: "Error", message: "Unknown error", statusCode: 520 });

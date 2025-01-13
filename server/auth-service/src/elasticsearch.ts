@@ -38,14 +38,18 @@ export const retryElasticSearchConnection = async function () {
 
 const checkIndexExist = async function (indexName: string): Promise<boolean> {
   const indexFound = await client.indices.exists({ index: indexName });
-
   return indexFound;
 };
 
 export const createIndex = async function (indexName: string) {
   try {
     const indexFound = await checkIndexExist(indexName);
-    if (indexFound) return logger.info(`Index:${indexName} already exists`);
+    if (indexFound) {
+      {
+        logger.info(`Index:${indexName} exist`);
+        return;
+      }
+    }
     await client.indices.create({ index: indexName });
     await client.indices.refresh({ index: indexName });
   } catch (err) {

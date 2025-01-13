@@ -18,7 +18,13 @@ export const getGigById = async function (
 
 export const searchGig = async function (
   query: string,
-  options: { min?: number; max?: number; from?: number; size?: number } = {
+  options: {
+    min?: number;
+    max?: number;
+    from?: number;
+    size?: number;
+    deliveryDate?: Date;
+  } = {
     from: 0,
     size: 10,
   }
@@ -46,6 +52,14 @@ export const searchGig = async function (
     queryList.push({
       range: { price: { gte: options.min, lte: options.max } },
     });
+
+  if (options.deliveryDate) {
+    queryList.push({
+      term: {
+        expectedDelivery: options.deliveryDate,
+      },
+    });
+  }
 
   const result = await client.search({
     index: "gigs",

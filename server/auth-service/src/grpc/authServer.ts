@@ -33,7 +33,7 @@ export const startGrpcServer = function () {
     "0.0.0.0:50051",
     grpc.ServerCredentials.createInsecure(),
     () => {
-      logger.info("GRPC started running...");
+      logger.info("GRPC Auth service started running...");
     }
   );
 };

@@ -35,7 +35,10 @@ class Config {
   private validateConfig() {
     for (let [key, value] of Object.entries(this)) {
       if (!value) {
-        throw new BadRequest(`${key} not found in env file`, "config");
+        throw new BadRequest(
+          `${key} not found in env file`,
+          "config auth service"
+        );
       }
     }
   }
