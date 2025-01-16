@@ -9,6 +9,7 @@ class Config {
   public MONGO_DB_ENDPOINT: string | undefined;
   public RABBITMQ_ENDPOINT: string | undefined;
   public REDIS_ENDPOINT: string | undefined;
+
   constructor() {
     this.loadConfig();
     this.PORT = +process.env.PORT!;
@@ -17,6 +18,7 @@ class Config {
     this.MONGO_DB_ENDPOINT = process.env.MONGO_DB_ENDPOINT;
     this.RABBITMQ_ENDPOINT = process.env.RABBITMQ_ENDPOINT;
     this.REDIS_ENDPOINT = process.env.REDIS_ENDPOINT;
+
     this.validateConfig();
   }
 
@@ -29,7 +31,7 @@ class Config {
       if (!value)
         throw new BadRequest(
           `${key} not found in env file`,
-          "config gig service"
+          "config chat service"
         );
     }
   }

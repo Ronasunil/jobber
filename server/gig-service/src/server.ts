@@ -57,12 +57,3 @@ const rabbitmqConnection = async function () {
   gigChannel = channel;
   return channel;
 };
-
-process.on("SIGTERM", (sig) => {
-  console.log("lp");
-  console.log(sig);
-});
-
-process.on("SIGINT", (e) => {
-  console.log(e);
-});

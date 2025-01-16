@@ -67,7 +67,8 @@ export const topRatedGigs = async function (_req: Request, res: Response) {
 
 export const gigByCategories = async function (req: Request, res: Response) {
   const { category } = req.params as { category: string };
-  const cacheKey = `category:${category}`;
+  const cacheKey = `category:${category}`
+  ;
   const cacheGig = await getGigCategoryCache(cacheKey);
   let gigs: GigHit[];
 

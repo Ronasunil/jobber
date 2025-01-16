@@ -1,11 +1,10 @@
-import amqp, { Channel, Connection } from "amqplib";
-
-import { config } from "@gig/Config";
+import { config } from "@chat/Config";
 import { winstonLogger } from "@ronasunil/jobber-shared";
+import amqp, { Channel, Connection } from "amqplib";
 
 const logger = winstonLogger(
   config.ELASTIC_SEARCH_ENDPOINT!,
-  "Gig service",
+  "Chat service",
   "info"
 );
 
@@ -22,12 +21,12 @@ export const connectToRabbitmq = async function (): Promise<
   try {
     const connection = await amqp.connect(config.RABBITMQ_ENDPOINT!);
     const channel = await connection.createChannel();
+    logger.info("Successfully connected to rabbitmq chat service");
     closeConnection(channel, connection);
-    logger.info("Succesfully connected to rabbitmq gig service");
     return channel;
   } catch (err) {
-    logger.info("Error connecting to rabbitmq... gig service");
+    console.log(err);
+    logger.info("Error connecting to rabbitmq... chat service");
     logger.error(err);
-    return undefined;
   }
 };

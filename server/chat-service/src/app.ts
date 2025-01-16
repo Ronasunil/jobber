@@ -1,12 +1,23 @@
 import express, { Application, json, urlencoded } from "express";
-import compression from "compression";
-import helmet from "helmet";
-import hpp from "hpp";
 import cors from "cors";
-import { config } from "@gig/Config";
-import { start } from "@gig/server";
-import { handleError, handleInvalidRoute } from "@gig/error/errorHandler";
-import { appRoutes } from "./routes";
+import compression from "compression";
+import hpp from "hpp";
+import helmet from "helmet";
+
+import { config } from "@chat/Config";
+import { handleInvalidRoute, handleError } from "@chat/error/errorHandler";
+import { appRoutes } from "@chat/routes";
+import { start } from "@chat/server";
+
+const corsMiddleware = function (app: Application) {
+  app.use(
+    cors({
+      credentials: true,
+      methods: ["GET", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+      origin: config.API_GATEWAY_ENDPOINT,
+    })
+  );
+};
 
 const globalMiddlewares = function (app: Application) {
   app.use(compression());
@@ -19,20 +30,10 @@ const securityMiddlewares = function (app: Application) {
   app.use(hpp());
 };
 
-const corsMiddleware = function (app: Application) {
-  app.use(
-    cors({
-      credentials: true,
-      origin: config.API_GATEWAY_ENDPOINT,
-      methods: ["GET", "PUT", "POST", "PATCH", "DELTE", "OPTIONS"],
-    })
-  );
-};
-
 const middlewares = function (app: Application) {
   corsMiddleware(app);
-  securityMiddlewares(app);
   globalMiddlewares(app);
+  securityMiddlewares(app);
 };
 
 const routes = function (app: Application) {
@@ -44,11 +45,10 @@ const errorHandler = function (app: Application) {
   app.use(handleError);
 };
 
-const initApp = async function () {
+const initApp = function () {
   const app = express();
 
-  // server setup
-  await start(app);
+  start(app);
 
   middlewares(app);
   routes(app);
