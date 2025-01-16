@@ -23,6 +23,7 @@ import { appRoutes } from "@gateway/routes";
 import { buyerAxios } from "@gateway/services/api/buyer";
 import { sellerAxios } from "@gateway/services/api/seller";
 import { gigAxios } from "@gateway/services/api/gig";
+import { chatAxios } from "./services/api/chat";
 
 const initApp = function (): Application {
   const app = express();
@@ -78,6 +79,7 @@ const passTokenMiddleware = function (
     buyerAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
     sellerAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
     gigAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
+    chatAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
   }
 
   next();

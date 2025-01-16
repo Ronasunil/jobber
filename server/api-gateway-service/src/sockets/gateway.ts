@@ -3,11 +3,21 @@ import {
   getOnlineUsersCache,
   removeOnlineUsersCache,
 } from "@gateway/cache/gatewayCache";
+import { config } from "@gateway/Config";
+import { winstonLogger } from "@ronasunil/jobber-shared";
 
-import { Server, Socket } from "socket.io";
+import { Server as SocketServer, Socket } from "socket.io";
 
-export const gatewaySocketListner = function (io: Server) {
-  io.on("connection", (socket: Socket) => gatewaySocketEvents(socket));
+const logger = winstonLogger(
+  config.ELASTIC_SEARCH_ENDPOINT!,
+  "Gateway service",
+  "info"
+);
+
+export const gatewaySocketListner = function (io: SocketServer) {
+  io.on("connection", (socket: Socket) => {
+    gatewaySocketEvents(socket);
+  });
 };
 
 const gatewaySocketEvents = function (socket: Socket) {

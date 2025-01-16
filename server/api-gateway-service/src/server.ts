@@ -1,15 +1,18 @@
 import { Application } from "express";
 import { Server } from "http";
 import { Server as SocketServer } from "socket.io";
+import { io } from "socket.io-client";
 
 import { config } from "@gateway/Config";
 import { winstonLogger } from "@ronasunil/jobber-shared";
 import Redis from "ioredis";
 import { createAdapter } from "@socket.io/redis-adapter";
 import { connectToRedis } from "./cache/connection";
-import { gatewaySocketListner } from "@gateway/sockets/gatewaySocket";
+import { gatewaySocketListner } from "@gateway/sockets/gateway";
+import { chatSocketListner } from "./sockets/chatClient";
 
 export let gatewayCache: Redis;
+export let gatewaySocket: SocketServer;
 
 const logger = winstonLogger(
   config.ELASTIC_SEARCH_ENDPOINT!,
@@ -43,13 +46,26 @@ const startSocketConnection = async function (server: Server) {
   const subClient = pubClient.duplicate();
 
   io.adapter(createAdapter(pubClient, subClient));
-
+  gatewaySocket = io;
   listenSocketConnections(io);
+};
+
+const startSocketClientConnection = function () {
+  const socket = io(config.CHAT_WS_URL!, {
+    transports: ["websocket", "polling"],
+    reconnection: true,
+    reconnectionAttempts: Infinity,
+    reconnectionDelay: 2000,
+    timeout: 5000,
+  });
+
+  chatSocketListner(socket);
 };
 
 const startServer = async function (app: Application) {
   const server = httpServer(app);
   await startSocketConnection(server);
+  startSocketClientConnection();
 
   server.listen(config.PORT, () => {
     logger.info(`gateway service is running on port:${config.PORT}`);
@@ -60,11 +76,3 @@ const db = function () {
   const client = connectToRedis();
   gatewayCache = client;
 };
-
-process.on("SIGINT", (err) => {
-  console.log(err);
-});
-
-process.on("SIGTERM", (err) => {
-  console.log(err);
-});

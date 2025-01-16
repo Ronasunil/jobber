@@ -2,11 +2,12 @@ import { Application } from "express";
 import { healthRoute } from "@gateway/routes/health";
 import { authRoutes } from "@gateway/routes/auth/auth";
 import { passwordRoutes } from "@gateway/routes/auth/password";
-import { searchRoutes } from "./routes/auth/search";
-import { buyerRoutes } from "./routes/user/buyer";
-import { sellerRoutes } from "./routes/user/seller";
-import { commandRoutes } from "./routes/gig/commandRoutes";
-import { queriesRoutes } from "./routes/gig/queriesRoutes";
+import { searchRoutes } from "@gateway/routes/auth/search";
+import { buyerRoutes } from "@gateway/routes/user/buyer";
+import { sellerRoutes } from "@gateway/routes/user/seller";
+import { commandRoutes } from "@gateway/routes/gig/commandRoutes";
+import { queriesRoutes } from "@gateway/routes/gig/queriesRoutes";
+import { chatRoutes } from "@gateway/routes/chat/chatRoutes";
 
 export const appRoutes = function (app: Application) {
   const healthRouter = healthRoute();
@@ -17,6 +18,7 @@ export const appRoutes = function (app: Application) {
   const sellerRouter = sellerRoutes();
   const gigsCommandRouter = commandRoutes();
   const gigsQueriesROuter = queriesRoutes();
+  const chatRouter = chatRoutes();
 
   app.use("/", healthRouter);
   app.use("/gateway", authRouter);
@@ -26,4 +28,5 @@ export const appRoutes = function (app: Application) {
   app.use("/gateway", sellerRouter);
   app.use("/gateway", gigsCommandRouter);
   app.use("/gateway", gigsQueriesROuter);
+  app.use("/gateway", chatRouter);
 };

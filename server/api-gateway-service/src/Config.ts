@@ -14,6 +14,8 @@ class Config {
   public USER_SERVICE_URL: string | undefined;
   public REDIS_HOST: string | undefined;
   public GIG_SERVICE_URL: string | undefined;
+  public CHAT_SERVICE_URL: string | undefined;
+  public CHAT_WS_URL: string | undefined;
 
   constructor() {
     this.loadEnv();
@@ -28,6 +30,8 @@ class Config {
     this.USER_SERVICE_URL = process.env.USER_SERVICE_URL;
     this.REDIS_HOST = process.env.REDIS_HOST;
     this.GIG_SERVICE_URL = process.env.GIG_SERVICE_URL;
+    this.CHAT_SERVICE_URL = process.env.CHAT_SERVICE_URL;
+    this.CHAT_WS_URL = process.env.CHAT_WS_URL;
     this.validateEnv();
   }
 
