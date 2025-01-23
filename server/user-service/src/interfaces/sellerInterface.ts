@@ -24,6 +24,7 @@ export interface SellerDoc extends mongoose.Document {
   certificate: Certificate[];
   responseTime: number;
   recentDelivery: Date;
+  jobOffers: number;
   ongoingJobs: number;
   cancelledJobs: number;
   totalEarning: number;

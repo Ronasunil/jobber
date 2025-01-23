@@ -55,6 +55,13 @@ export const updateOngoingJob = async function (
   });
 };
 
+export const updateJobOffers = async function (
+  sellerId: string,
+  count: number
+) {
+  await SellerModel.findByIdAndUpdate(sellerId, { $inc: { jobOffers: count } });
+};
+
 export const updateCancelledJob = async function (
   sellerId: string,
   count: number
@@ -100,8 +107,8 @@ export const addSellerReview = async function (
 };
 
 export const cancelJob = async function (sellerId: string) {
-  SellerModel.findByIdAndUpdate(sellerId, {
-    $inc: { cancelledJobs: 1, ongoingJobs: -1 },
+  await SellerModel.findByIdAndUpdate(sellerId, {
+    $inc: { cancelledJobs: 1, jobOffers: -1 },
   });
 };
 

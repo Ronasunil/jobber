@@ -101,6 +101,10 @@ export const chatSchema = Joi.object({
       "date.base": "defaultDate must be a valid date.",
       "any.required": "deafult date is required",
     }),
+    deliveryInDays: Joi.number().required().messages({
+      "number.base": "deliveryInDays must be a  number",
+      "any.required": "deliveryInDays is required",
+    }),
 
     expectedDelivery: Joi.date()
       .min("now")

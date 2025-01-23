@@ -73,6 +73,7 @@ const sellerSchema = new Schema(
     responseTime: { type: Number, default: 1, required: true },
     recentDelivery: { type: Date, default: "" },
     ongoingJobs: { type: Number, defualt: 0 },
+    jobOffers: { type: Number, default: 0 },
     cancelledJobs: { type: Number, default: 0 },
     totalEarning: { type: Number, default: 0 },
     totalGigs: { type: Number, default: 0 },

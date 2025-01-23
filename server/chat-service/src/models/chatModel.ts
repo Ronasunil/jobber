@@ -84,6 +84,7 @@ const chatSchema = new Schema({
     price: { type: Number },
     description: { type: String },
     defaultDeliveryDate: { type: Date },
+    deliveryInDays: { type: Number },
     expectedDelivery: { type: Date },
     rejected: { type: Boolean },
     accepted: { type: Boolean },

@@ -7,7 +7,7 @@ import cors from "cors";
 import { config } from "@user/Config";
 import { handleInvalidRoute, handleError } from "@user/errors/errorHandler";
 import { start } from "@user/server";
-import { userRoutes } from "./routes";
+import { userRoutes } from "@user/routes";
 
 const initApp = function () {
   const app = express();

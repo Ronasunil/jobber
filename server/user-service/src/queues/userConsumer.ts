@@ -1,9 +1,13 @@
 import { RabbitUserPayload } from "@ronasunil/jobber-shared";
-import { createBuyer } from "@user/services/buyerService";
+import {
+  addItemToPurchasedGigs,
+  createBuyer,
+} from "@user/services/buyerService";
 import {
   addSellerReview,
   cancelJob,
   sellerJobCompleted,
+  updateJobOffers,
   updateOngoingJob,
   updateTotalGigs,
 } from "@user/services/sellerService";
@@ -35,10 +39,12 @@ export const userBuyerCreateConsumer = async function (channel: Channel) {
 
 export const sellerJobConsumer = async function (channel: Channel) {
   const exchangeKey = "seller-job-lifecycle";
+
   const assignedRoutingKey = "job-assigned";
+  const assignedQueue = "seller-job-assigned-queue";
+
   const completedRoutingKey = "job-completed";
   const completedQueue = "seller-job-completed-queue";
-  const assignedQueue = "seller-job-assigned-queue";
 
   await channel.assertExchange(exchangeKey, "direct", {
     durable: true,
@@ -66,7 +72,18 @@ export const sellerJobConsumer = async function (channel: Channel) {
 
     if (data.type === "assign-order") {
       const { sellerId, count } = data as { sellerId: string; count: number };
+      await updateJobOffers(sellerId, count);
+    }
+
+    if (data.type === "approve-order") {
+      const { sellerId, count, buyerId, item } = data as {
+        sellerId: string;
+        count: number;
+        buyerId: string;
+        item: string;
+      };
       await updateOngoingJob(sellerId, count);
+      await addItemToPurchasedGigs(buyerId, item);
     }
     if (data.type === "update-gig-count") {
       const { count, sellerId } = data as { count: number; sellerId: string };

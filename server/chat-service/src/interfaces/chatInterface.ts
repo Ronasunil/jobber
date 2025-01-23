@@ -23,6 +23,7 @@ export interface ChatDoc extends mongoose.Document {
     description: string;
     defaultDeliveryDate: Date;
     expectedDelivery: Date;
+    deliveryInDays: number;
     rejected: Boolean;
     accepted: Boolean;
   };

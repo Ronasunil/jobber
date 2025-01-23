@@ -56,7 +56,7 @@ services:
     networks:
       - elk-network
   # volumes:
-  #   - ./data/es:/usr/share/elasticsearch/data
+  # - ./data/es:/usr/share/elasticsearch/data
 
   kibana:
     depends_on:
