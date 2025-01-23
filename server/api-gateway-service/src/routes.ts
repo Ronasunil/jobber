@@ -8,6 +8,8 @@ import { sellerRoutes } from "@gateway/routes/user/seller";
 import { commandRoutes } from "@gateway/routes/gig/commandRoutes";
 import { queriesRoutes } from "@gateway/routes/gig/queriesRoutes";
 import { chatRoutes } from "@gateway/routes/chat/chatRoutes";
+import { appNotifcationRoutes } from "@gateway/routes/app-notification/app-notification";
+import { orderRoutes } from "@gateway/routes/order/order";
 
 export const appRoutes = function (app: Application) {
   const healthRouter = healthRoute();
@@ -19,6 +21,8 @@ export const appRoutes = function (app: Application) {
   const gigsCommandRouter = commandRoutes();
   const gigsQueriesROuter = queriesRoutes();
   const chatRouter = chatRoutes();
+  const appNotifcationRouter = appNotifcationRoutes();
+  const orderRouter = orderRoutes();
 
   app.use("/", healthRouter);
   app.use("/gateway", authRouter);
@@ -29,4 +33,6 @@ export const appRoutes = function (app: Application) {
   app.use("/gateway", gigsCommandRouter);
   app.use("/gateway", gigsQueriesROuter);
   app.use("/gateway", chatRouter);
+  app.use("/gateway", appNotifcationRouter);
+  app.use("/gateway", orderRouter);
 };

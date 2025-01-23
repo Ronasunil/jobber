@@ -16,6 +16,7 @@ const logger = winstonLogger(
 
 export const gatewaySocketListner = function (io: SocketServer) {
   io.on("connection", (socket: Socket) => {
+    logger.info("Gateway socket started connection");
     gatewaySocketEvents(socket);
   });
 };

@@ -10,6 +10,7 @@ import { createAdapter } from "@socket.io/redis-adapter";
 import { connectToRedis } from "./cache/connection";
 import { gatewaySocketListner } from "@gateway/sockets/gateway";
 import { chatSocketListner } from "./sockets/chatClient";
+import { appNotificationSocketListner } from "./sockets/appNotificationClient";
 
 export let gatewayCache: Redis;
 export let gatewaySocket: SocketServer;
@@ -50,22 +51,35 @@ const startSocketConnection = async function (server: Server) {
   listenSocketConnections(io);
 };
 
-const startSocketClientConnection = function () {
+const setupChatSocketClient = function () {
   const socket = io(config.CHAT_WS_URL!, {
     transports: ["websocket", "polling"],
     reconnection: true,
     reconnectionAttempts: Infinity,
     reconnectionDelay: 2000,
-    timeout: 5000,
   });
 
   chatSocketListner(socket);
 };
 
+const setupAppNotificationSocketClient = function () {
+  const socket = io(config.APP_NOTIFICATION_WS_URL!, {
+    transports: ["websockets", "polling"],
+    reconnection: true,
+    reconnectionAttempts: Infinity,
+    reconnectionDelay: 2000,
+  });
+
+  appNotificationSocketListner(socket);
+};
+
 const startServer = async function (app: Application) {
   const server = httpServer(app);
   await startSocketConnection(server);
-  startSocketClientConnection();
+
+  // socket client connections
+  setupChatSocketClient();
+  setupAppNotificationSocketClient();
 
   server.listen(config.PORT, () => {
     logger.info(`gateway service is running on port:${config.PORT}`);

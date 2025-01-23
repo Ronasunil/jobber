@@ -16,6 +16,9 @@ class Config {
   public GIG_SERVICE_URL: string | undefined;
   public CHAT_SERVICE_URL: string | undefined;
   public CHAT_WS_URL: string | undefined;
+  public APP_NOTIFICATION_SERVICE_URL: string | undefined;
+  public APP_NOTIFICATION_WS_URL: string | undefined;
+  public ORDER_SERVICE_URL: string | undefined;
 
   constructor() {
     this.loadEnv();
@@ -32,6 +35,10 @@ class Config {
     this.GIG_SERVICE_URL = process.env.GIG_SERVICE_URL;
     this.CHAT_SERVICE_URL = process.env.CHAT_SERVICE_URL;
     this.CHAT_WS_URL = process.env.CHAT_WS_URL;
+    this.APP_NOTIFICATION_SERVICE_URL =
+      process.env.APP_NOTIFICATION_SERVICE_URL;
+    this.APP_NOTIFICATION_WS_URL = process.env.APP_NOTIFICATION_WS_URL;
+    this.ORDER_SERVICE_URL = process.env.ORDER_SERVICE_URL;
     this.validateEnv();
   }
 

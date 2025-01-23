@@ -27,6 +27,7 @@ export const chatSocketListner = function (io: Socket) {
     io.connect();
   });
 
+  // Custom events
   chatSocketCustomEvents(io);
 };
 
