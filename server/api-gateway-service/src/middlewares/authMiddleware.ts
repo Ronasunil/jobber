@@ -8,6 +8,7 @@ import {
 import { config } from "@gateway/Config";
 import { checkUserExist } from "@gateway/grpc/authClient";
 import { checkUserIsSeller } from "@gateway/grpc/sellerClient";
+import { AxiosInstance } from "axios";
 
 declare global {
   namespace Express {
@@ -77,7 +78,7 @@ export const verifyUserSellerStatus = function (
   _res: Response,
   next: NextFunction
 ) {
-  const seller = checkUserIsSeller(req.currentUser!.id);
+  const seller = checkUserIsSeller(req.currentUser!.username);
 
   if (!seller)
     throw new BadRequest(
@@ -85,4 +86,13 @@ export const verifyUserSellerStatus = function (
       "verifyUserStatus(): gateway service"
     );
   next();
+};
+
+export const passCurrentUser = function (axiosInstance: AxiosInstance) {
+  return function (req: Request, res: Response, next: NextFunction) {
+    axiosInstance.defaults.headers["currentUser"] = JSON.stringify(
+      req.currentUser
+    );
+    next();
+  };
 };

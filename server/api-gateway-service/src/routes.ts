@@ -10,6 +10,7 @@ import { queriesRoutes } from "@gateway/routes/gig/queriesRoutes";
 import { chatRoutes } from "@gateway/routes/chat/chatRoutes";
 import { appNotifcationRoutes } from "@gateway/routes/app-notification/app-notification";
 import { orderRoutes } from "@gateway/routes/order/order";
+import { reviewRoutes } from "@gateway/routes/review/review";
 
 export const appRoutes = function (app: Application) {
   const healthRouter = healthRoute();
@@ -23,6 +24,7 @@ export const appRoutes = function (app: Application) {
   const chatRouter = chatRoutes();
   const appNotifcationRouter = appNotifcationRoutes();
   const orderRouter = orderRoutes();
+  const reviewsRouter = reviewRoutes();
 
   app.use("/", healthRouter);
   app.use("/gateway", authRouter);
@@ -35,4 +37,5 @@ export const appRoutes = function (app: Application) {
   app.use("/gateway", chatRouter);
   app.use("/gateway", appNotifcationRouter);
   app.use("/gateway", orderRouter);
+  app.use("/gateway", reviewsRouter);
 };

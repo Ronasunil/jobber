@@ -21,11 +21,11 @@ const createClient = function () {
   return client;
 };
 
-export const checkUserIsSeller = function (id: string): boolean {
+export const checkUserIsSeller = function (username: string): boolean {
   const client = createClient();
   let isSeller = false;
   client.checkUserIsSeller(
-    { id },
+    { username },
     (err: grpc.ServiceError | null, response: any) => {
       if (err) return logger.info(err.message, err);
       isSeller = response.sellerExist;

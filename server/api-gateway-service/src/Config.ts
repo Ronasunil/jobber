@@ -19,6 +19,7 @@ class Config {
   public APP_NOTIFICATION_SERVICE_URL: string | undefined;
   public APP_NOTIFICATION_WS_URL: string | undefined;
   public ORDER_SERVICE_URL: string | undefined;
+  public REVIEW_SERVICE_URL: string | undefined;
 
   constructor() {
     this.loadEnv();
@@ -39,6 +40,7 @@ class Config {
       process.env.APP_NOTIFICATION_SERVICE_URL;
     this.APP_NOTIFICATION_WS_URL = process.env.APP_NOTIFICATION_WS_URL;
     this.ORDER_SERVICE_URL = process.env.ORDER_SERVICE_URL;
+    this.REVIEW_SERVICE_URL = process.env.REVIEW_SERVICE_URL;
     this.validateEnv();
   }
 

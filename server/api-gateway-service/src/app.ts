@@ -23,9 +23,10 @@ import { appRoutes } from "@gateway/routes";
 import { buyerAxios } from "@gateway/services/api/buyer";
 import { sellerAxios } from "@gateway/services/api/seller";
 import { gigAxios } from "@gateway/services/api/gig";
-import { chatAxios } from "./services/api/chat";
-import { appNotificationAxios } from "./services/api/appNotification";
-import { orderAxios } from "./services/api/order";
+import { chatAxios } from "@gateway/services/api/chat";
+import { appNotificationAxios } from "@gateway/services/api/appNotification";
+import { orderAxios } from "@gateway/services/api/order";
+import { reviewAxios } from "./services/api/review";
 
 const initApp = function (): Application {
   const app = express();
@@ -87,6 +88,7 @@ const passTokenMiddleware = function (
       "Authorization"
     ] = `Bearer ${req.session.jwt}`;
     orderAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
+    reviewAxios.defaults.headers["Authorization"] = `Bearer ${req.session.jwt}`;
   }
 
   next();
