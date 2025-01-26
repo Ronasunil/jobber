@@ -55,3 +55,7 @@ const initApp = function () {
 };
 
 initApp();
+
+process.on("SIGTERM", (sig) => {
+  console.log(sig);
+});

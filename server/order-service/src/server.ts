@@ -47,7 +47,35 @@ const rabbitmq = async function () {
   orderChannel = channel;
 };
 
+const processHandlers = function () {
+  process.on("uncaughtException", (err) => {
+    console.log(`Uncaught error:${err}`);
+    logger.error(`Uncaught error:${err}`);
+    process.exit(1);
+  });
+
+  process.on("unhandledRejection", (err) => {
+    console.log(`Uncaught expression ${err}`);
+    logger.error(`Uncaught expression:${err}`);
+    process.exit(2);
+  });
+
+  process.on("SIGTERM", (sig) => {
+    console.log(`Caught sigterm:${sig}`);
+    logger.error(`Caught sigterm:${sig}`);
+    process.exit(2);
+  });
+
+  process.on("SIGINT", (sig) => {
+    console.log(`Caught sigint:${sig}`);
+    logger.error(`Caught sigint:${sig}`);
+
+    process.exit(2);
+  });
+};
+
 export const start = async function (app: Application) {
+  processHandlers();
   startServer(app);
 
   await db();

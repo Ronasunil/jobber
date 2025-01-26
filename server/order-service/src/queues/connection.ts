@@ -1,4 +1,4 @@
-import { config } from "@app-notification/Config";
+import { config } from "@order/Config";
 import { winstonLogger } from "@ronasunil/jobber-shared";
 import amqp, { Channel } from "amqplib";
 

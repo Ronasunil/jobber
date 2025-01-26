@@ -1,5 +1,5 @@
 import { DataTypes, Model, ModelDefined } from "sequelize";
-import { hash, compare } from "bcrypt";
+import { hash } from "bcrypt";
 
 import { sequelize } from "@auth/db";
 import { AuthCreationAttr, AuthDoc } from "@auth/interfaces/authInterface";

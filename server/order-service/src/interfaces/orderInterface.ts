@@ -1,4 +1,8 @@
-import { ExtensionRequest, FileDelivery } from "@ronasunil/jobber-shared";
+import {
+  ExtensionRequest,
+  FileDelivery,
+  Status,
+} from "@ronasunil/jobber-shared";
 import mongoose from "mongoose";
 
 interface Seller {

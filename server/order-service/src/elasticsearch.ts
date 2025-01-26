@@ -4,7 +4,7 @@ import { config } from "@order/Config";
 
 const logger = winstonLogger(
   config.ELASTIC_SEARCH_ENDPOINT!,
-  "App-notification service",
+  "Order service",
   "info"
 );
 

@@ -24,23 +24,12 @@ services:
       - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=jobber
-      - MYSQL_DATABASE=jobber_user
+      - MYSQL_DATABASE=jobber_app
       - MYSQL_USER=jobber
       - MYSQL_PASSWORD=jobber
     volumes:
       - ./data/mysql:/var/lib/mysql
-  postgres:
-    container_name: postgres_container
-    image: postgres
-    restart: always
-    ports:
-      - 8080:8080
-    environment:
-      - POSTGRES_PASSWORD=jobber
-      - POSTGRES_USER=jobber
-      - POSTGRES_DB=jobber_reviews
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+
   elasticsearch:
     container_name: elasticsearch_container
     image: docker.elastic.co/elasticsearch/elasticsearch:8.16.1

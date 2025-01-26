@@ -14,8 +14,8 @@ const checkUserIsSeller = async function (
   call: grpc.ServerUnaryCall<any, any>,
   callback: grpc.sendUnaryData<any>
 ) {
-  const id = call.request;
-  const seller = await SellerModel.findById(id);
+  const username = call.request;
+  const seller = await SellerModel.findOne({ username });
 
   const sellerExist = seller ? true : false;
 
