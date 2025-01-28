@@ -370,7 +370,7 @@ export const addRating = async function (
       "addRating(): order service"
     );
 
-  OrderModel.findByIdAndUpdate(
+  await OrderModel.findByIdAndUpdate(
     orderId,
     type === "seller"
       ? {

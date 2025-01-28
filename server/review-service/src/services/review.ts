@@ -1,4 +1,5 @@
 import { Review } from "@review/model/reviewModel";
+import { EmitReviewCreation } from "@review/utils/helpers";
 import { BadRequest, ReviewCreationAttrs } from "@ronasunil/jobber-shared";
 
 export const getSellerReviews = async function (
@@ -12,6 +13,7 @@ export const createReview = async function (
   data: ReviewCreationAttrs
 ): Promise<Review> {
   const review = await Review.create({ ...data });
+  new EmitReviewCreation(review);
   return review;
 };
 
@@ -24,6 +26,7 @@ export const getReviewById = async function (
       `can't find review regarding this id:${reviewId}`,
       "getReviewById  review service"
     );
+
   return review;
 };
 
@@ -36,7 +39,6 @@ export const deleteReview = async function (
   reviewId: string,
   username: string
 ): Promise<void> {
-  console.log(username, "ppppp");
   const review = await Review.findOne({
     where: { reviewerUsername: username, id: reviewId },
   });

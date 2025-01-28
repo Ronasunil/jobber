@@ -29,19 +29,19 @@ export const reviewCreationSchema = Joi.object({
     "string.base": "reviewerUsername must be string",
     "any.required": "reviewerUsername is required field",
   }),
+
+  rating: Joi.number().required().min(1).max(5).messages({
+    "number.base": "rating must be a number",
+    "number.min": "Rating must be at least 1.",
+    "number.max": "Rating must be 5 or less.",
+  }),
   type: Joi.string()
-    .valid(
-      "gig-review",
-      "recommendation",
-      "user-to-seller-review",
-      "seller-to-user-review"
-    )
+    .valid("gig-review", "recommendation", "order-rating")
     .required()
     .messages({
       "string.base": "type must be a string",
       "any.required": "type is required field",
-      "string.valid":
-        "type muse be review , recommendation, user-to-seller-review or seller-to-user-review",
+      "string.valid": "type muse be review , recommendation, order-rating",
     }),
   isDeleted: Joi.boolean().required().messages({
     "boolean.base": "isDeleted must be a boolean",
@@ -50,6 +50,10 @@ export const reviewCreationSchema = Joi.object({
   review: Joi.string().required().messages({
     "string.base": "review must be a string",
     "any.required": "review is required field",
+  }),
+
+  orderReviewType: Joi.valid("seller", "buyer").optional().messages({
+    "string.valid": "orderReviewType muse be either seller or buyer",
   }),
 })
   .xor("gigId", "sellerId", "buyerId")

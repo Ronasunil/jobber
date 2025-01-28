@@ -7,6 +7,7 @@ import { retryElasticSearchConnection } from "./elasticsearch";
 import { connectToRabbitmq } from "@gig/queues/connection";
 import { Channel } from "amqplib";
 import Redis from "ioredis";
+import { gigReviewConsumer } from "./queues/gigConsumer";
 
 export let gigChannel: Channel;
 export let gigCache: Redis;
@@ -55,5 +56,7 @@ const rabbitmqConnection = async function () {
     );
 
   gigChannel = channel;
+
+  gigReviewConsumer(gigChannel);
   return channel;
 };

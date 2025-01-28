@@ -127,7 +127,7 @@ export const sellerJobConsumer = async function (channel: Channel) {
 export const ratingsConsumer = async function (channel: Channel) {
   const exchangeKey = "seller-review";
   const routingKey = "add";
-  const queueName = "sellere-review";
+  const queueName = "seller-review";
 
   await channel.assertExchange(exchangeKey, "direct", {
     durable: true,
@@ -149,5 +149,6 @@ export const ratingsConsumer = async function (channel: Channel) {
     };
 
     await addSellerReview(sellerId, ratingCount);
+    channel.ack(msg);
   });
 };

@@ -52,24 +52,21 @@ export class Review extends Model {
   isDeleted!: Boolean;
 
   @AllowNull(false)
-  @Column(
-    DataType.ENUM(
-      "gig-review",
-      "recommendation",
-      "user-to-seller-review",
-      "seller-to-user-review"
-    )
-  )
-  type!:
-    | "gig-review"
-    | "recommendation"
-    | "user-to-seller-review"
-    | "seller-to-user-review";
+  @Column(DataType.ENUM("gig-review", "recommendation", "order-rating"))
+  type!: "gig-review" | "recommendation" | "order-rating";
+
+  @AllowNull(true)
+  @Column(DataType.ENUM("seller", "buyer"))
+  orderReviewType!: "seller" | "buyer";
 
   @AllowNull(false)
   @Default("")
   @Column(DataType.STRING)
   review!: string;
+
+  @AllowNull(false)
+  @Column(DataType.NUMBER)
+  rating!: number;
 
   @AllowNull(true)
   @Default(DataType.NOW)

@@ -5,8 +5,9 @@ export interface ReviewDoc {
   reviewerId: string;
   reviewerProfilePhoto: string;
   reviewerUsername: string;
-  type: "review" | "recommendation";
+  type: "gig-review" | "recommendation" | "order-rating";
   isDeleted: Boolean;
   review: string;
+  rating: number;
   createdAt?: Date;
 }

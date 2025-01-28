@@ -1,12 +1,11 @@
 import { Client } from "@elastic/elasticsearch";
-import { winstonLogger } from "@ronasunil/jobber-shared";
+import { GigRatingUpdateAttrs, winstonLogger } from "@ronasunil/jobber-shared";
 import { config } from "@gig/Config";
 import {
   GigAttrs,
   GigDoc,
   GigHit,
   GigUpdateAttrs,
-  GitRatingUpdateAttrs,
 } from "./interfaces/gigInterface";
 
 const logger = winstonLogger(
@@ -161,7 +160,7 @@ export const getGigByActiveStatus = async function (
 
 export const updateGigRatings = async function (
   index: string,
-  data: GitRatingUpdateAttrs,
+  data: GigRatingUpdateAttrs,
   ratingsKey: string
 ) {
   const { ratingsCount, gigId } = data;

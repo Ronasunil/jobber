@@ -114,5 +114,7 @@ export const emailOrderConsumer = async function (
       await sendEmail("orderPlaced", locals, receiverEmail);
       await sendEmail("orderReceipt", locals, receiverEmail);
     } else await sendEmail(template, locals, receiverEmail);
+
+    channel.ack(msg);
   });
 };

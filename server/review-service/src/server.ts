@@ -1,10 +1,13 @@
 import { Application } from "express";
 import { Server } from "http";
 import { config } from "@review/Config";
-import { winstonLogger } from "@ronasunil/jobber-shared";
+import { BadRequest, winstonLogger } from "@ronasunil/jobber-shared";
 import { connectToRabbitmq } from "@review/queues/connection";
 import { connectToMysql } from "@review/db";
 import { retryElasticsearchConnection } from "@review/elasticsearch";
+import { Channel } from "amqplib";
+
+export let reviewChannel: Channel;
 
 const logger = winstonLogger(
   config.ELASTIC_SEARCH_ENDPOINT!,
@@ -25,7 +28,14 @@ const startHttpServer = function (app: Application) {
 };
 
 const rabbitmqConnection = async function () {
-  await connectToRabbitmq();
+  const channel = await connectToRabbitmq();
+  if (!channel)
+    throw new BadRequest(
+      `Error connecting to rabbitmq channel is undefined`,
+      "rabbitmqConnection(): review service"
+    );
+
+  reviewChannel = channel;
 };
 
 const db = async function () {

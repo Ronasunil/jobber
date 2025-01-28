@@ -8,6 +8,8 @@ services:
     volumes:
       - ./data/redis:/data
     command: ["redis-server"]
+    networks:
+      - app-network
   # mongodb:
   #   container_name: mongodb_container
   #   image: mongo
@@ -102,9 +104,43 @@ services:
   #   networks:
   #     - rabbitmq-network
   #     - elk-network
+  #     - app-network
+  gateway:
+    container_name: :gateway_container
+    build:
+      context: "./server/api-gateway-service"
+      dockerfile: "./server/api-gateway-service/Dockerfile"
+    env_file: "./server/api-gateway-service/src/config.env"
+    environment:
+      - PORT=2000
+      - ELASTIC_SEARCH_ENDPOINT=http://elasticsearch_container:9200
+      - NODE_ENV=development
+      - COOKIE_SECRET=BPjGpCyg8BUxVCanXJazuGp8JRw2PGHC
+      - CLIENT_URL=http://localhost:5173
+      - API_GATEWAY_HEADER=secret-*-*&^*%$%%!^^^^-secret
+      - JWT_SECRET=pzfHGlWkWDDvComxj8M9J6cfCn2tlIjB
+      - AUTH_SERVICE_URL=http://localhost:2002
+      - USER_SERVICE_URL=http://localhost:2003
+      - GIG_SERVICE_URL=http://localhost:2004
+      - CHAT_SERVICE_URL=http://localhost:2005
+      - APP_NOTIFICATION_SERVICE_URL=http://localhost:2006
+      - APP_NOTIFICATION_WS_URL=ws://localhost:2006
+      - ORDER_SERVICE_URL=http://localhost:2007
+      - CHAT_WS_URL=ws://localhost:2005
+      - REVIEW_SERVICE_URL=http://localhost:2008
+      - REDIS_HOST=redis://redis_container:6379
+    depends_on:
+      - redis
+      - elasticsearch
+    networks:
+      - app-network
+      - elk-network
+      - rabbitmq-network
 
 networks:
   elk-network:
     driver: bridge
   rabbitmq-network:
+    driver: bridge
+  app-network:
     driver: bridge

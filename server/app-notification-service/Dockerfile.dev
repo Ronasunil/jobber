@@ -1,0 +1,11 @@
+FROM node:alpine:3.20
+WORKDIR /app
+
+COPY src ./src
+COPY package.json ./
+COPY .npmrc ./
+COPY tsconfig.json ./
+
+RUN touch package.json && sed -i  sed -i 's/"@Ronasunil/jobber-shared"/"@ronasunil/jobber-shared"/g' package.json
+RUN npm install && npm i -g nodemon && npm i -g ts-node
+CMD [ "npm", "run", "start:dev" ]

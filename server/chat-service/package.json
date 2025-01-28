@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "start:dev": "nodemon -r tsconfig-paths/register src/app.ts",
-    "build": "tsc && tsc-alias -p tsconfig.json && cp src/config.env build/",
+    "build": "tsc && tsc-alias -p tsconfig.json && cp -r src/config.env build/",
     "start": "pm2 start build/app.js -i 5 --attach",
     "stop": "pm2 stop all",
     "delete": "pm2 delete all"
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.17.0",
-    "@ronasunil/jobber-shared": "npm:@Ronasunil/jobber-shared@^1.3.14",
+    "@ronasunil/jobber-shared": "npm:@Ronasunil/jobber-shared@^1.4.4",
     "@socket.io/redis-adapter": "^8.3.0",
     "amqplib": "^0.10.5",
     "cloudinary": "^2.5.1",
@@ -43,5 +43,8 @@
     "joi": "^17.13.3",
     "mongoose": "^8.9.4",
     "socket.io": "^4.8.1"
+  },
+  "engines": {
+    "node": "22.13.1"
   }
 }

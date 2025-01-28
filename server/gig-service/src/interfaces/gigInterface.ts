@@ -56,12 +56,6 @@ export interface GigUpdateAttrs {
   expectedDelivery?: Date;
 }
 
-export interface GitRatingUpdateAttrs {
-  ratingsCount: number;
-  sellerId: string;
-  gigId: string;
-}
-
 export interface GigHit {
   _index: string;
   _id: string;

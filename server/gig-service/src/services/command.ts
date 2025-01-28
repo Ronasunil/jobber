@@ -4,14 +4,15 @@ import {
   updateGigRatings,
   updateIndexData,
 } from "@gig/elasticsearch";
-import {
-  GigUpdateAttrs,
-  GitRatingUpdateAttrs,
-} from "@gig/interfaces/gigInterface";
+import { GigUpdateAttrs } from "@gig/interfaces/gigInterface";
 import { GigModel } from "@gig/models/gigModel";
 import { publishDirectMessage } from "@gig/queues/gigProducer";
 import { gigChannel } from "@gig/server";
-import { BadRequest, GigCreationAttrs } from "@ronasunil/jobber-shared";
+import {
+  BadRequest,
+  GigCreationAttrs,
+  GigRatingUpdateAttrs,
+} from "@ronasunil/jobber-shared";
 
 export const createGig = async function (data: GigCreationAttrs) {
   const gig = await GigModel.create(data);
@@ -80,10 +81,8 @@ export const updateGig = async function (
   await updateIndexData("gigs", id, gigDoc);
 };
 
-export const addReview = async function (
-  gigId: string,
-  doc: GitRatingUpdateAttrs
-) {
+export const addReview = async function (doc: GigRatingUpdateAttrs) {
+  const { gigId } = doc;
   const ratingsMap: Record<string, string> = {
     "1": "one",
     "2": "two",
@@ -107,6 +106,7 @@ export const addReview = async function (
     ratingsSum: (gig.ratingsSum += doc.ratingsCount),
     [`ratingsCategories.${ratingsKey}.count`]: 1,
     [`ratingsCategories.${ratingsKey}.value`]: doc.ratingsCount,
+    ratings: (gig.ratingsSum += doc.ratingsCount) / (gig.ratingsCount += 1),
   });
 
   await gig.save({ validateBeforeSave: true });

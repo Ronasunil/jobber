@@ -38,6 +38,7 @@ export const notificationConsumer = async function (channel: Channel) {
       ) as NotificationCreationAttr;
 
       await createNotification(data);
+      channel.ack(msg);
     });
   } catch (err) {
     logger.info("Error creating queue");

@@ -6,6 +6,7 @@ import { connectToMongodb } from "@user/db";
 import { connectToRabbitmq } from "@user/queues/connection";
 import { retryElasticSearchConnection } from "@user/elasticsearch";
 import {
+  ratingsConsumer,
   sellerJobConsumer,
   userBuyerCreateConsumer,
 } from "./queues/userConsumer";
@@ -50,6 +51,7 @@ const rabbitmqConnection = async function () {
 
   await userBuyerCreateConsumer(channel);
   await sellerJobConsumer(channel);
+  await ratingsConsumer(channel);
   return channel;
 };
 
