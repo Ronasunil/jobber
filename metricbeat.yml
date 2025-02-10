@@ -1,0 +1,49 @@
+metricbeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+metricbeat.modules:
+  # DOCKER
+  - module: docker
+    metricsets:
+      - "container"
+      - "cpu"
+      - "diskio"
+      - "event"
+      - "healthcheck"
+      - "info"
+      #- "image"
+      - "memory"
+      - "network"
+    hosts: ["unix:///var/run/docker.sock"]
+    period: 10s
+    enabled: true
+
+  - module: mongodb
+    metricsets: ["dbstats", "status", "collstats", "metrics", "replstatus"]
+    period: 10s
+    enabled: true
+
+    hosts: ["mongodb://mongodb_container:27017"]
+
+  - module: rabbitmq
+    metricsets: ["node", "queue", "connection"]
+    enabled: true
+    period: 10s
+    hosts: ["rabbitmq_container:15672"]
+
+  - module: redis
+    metricsets: ["info", "keyspace"]
+    enabled: true
+    period: 10s
+
+    # Redis hosts
+    hosts: ["redis_container:6379"]
+
+  - module: mysql
+    metricsets:
+      - "status"
+    #  - "galera_status"
+    period: 10s
+
+    hosts: ["root:jobber@tcp(mysql_container:3306)/"]

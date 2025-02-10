@@ -64,7 +64,7 @@ const setupChatSocketClient = function () {
 
 const setupAppNotificationSocketClient = function () {
   const socket = io(config.APP_NOTIFICATION_WS_URL!, {
-    transports: ["websockets", "polling"],
+    transports: ["websocket", "polling"],
     reconnection: true,
     reconnectionAttempts: Infinity,
     reconnectionDelay: 2000,

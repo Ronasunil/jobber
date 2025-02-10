@@ -11,5 +11,9 @@ const logger = winstonLogger(
 export const notificationSocketListner = function (io: SocketServer) {
   io.on("connection", (socket: Socket) => {
     logger.info("Notifiction socket started");
+
+    socket.on("disconnect", (reason) => {
+      logger.info(`Socket disconnected: ${reason}`);
+    });
   });
 };

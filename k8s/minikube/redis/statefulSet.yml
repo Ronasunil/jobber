@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jobber-redis
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: jobber-redis
+  serviceName: jobber-redis
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jobber-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:8.0-M03-alpine
+          command: ["redis-server", "--appendonly", "yes"]
+          ports:
+            - containerPort: 6379
+              name: redis-port
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "650m"
+            requests:
+              memory: "650Mi"
+              cpu: "350m"
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "local-storage-redis"
+        resources:
+          requests:
+            storage: 3Gi

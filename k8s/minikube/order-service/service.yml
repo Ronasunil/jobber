@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jobber-order
+  namespace: development
+spec:
+  selector:
+    app: jobber-order
+  ports:
+    - name: order
+      port: 2007
+      targetPort: 2007

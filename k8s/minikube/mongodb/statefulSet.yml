@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jobber-mongodb
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: jobber-mongodb
+  serviceName: jobber-mongodb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jobber-mongodb
+    spec:
+      containers:
+        - name: mognodb
+          image: mongo
+          ports:
+            - name: mongodb
+              containerPort: 27017
+          resources:
+            limits:
+              cpu: "700m"
+              memory: "1Gi"
+            requests:
+              cpu: "400m"
+              memory: "500Mi"
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: mongodb-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "local-storage-mongodb"
+        resources:
+          requests:
+            storage: 4Gi

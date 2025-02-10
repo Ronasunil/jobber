@@ -34,6 +34,7 @@ const corsMiddleware = function (app: Application) {
   );
 };
 const middlewares = function (app: Application) {
+  app.set("trust proxy", true);
   corsMiddleware(app);
   globalMiddlewares(app);
   securityMiddlewares(app);

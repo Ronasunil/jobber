@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jobber-mongodb-pv
+spec:
+  capacity:
+    storage: 4Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "local-storage-mongodb"
+  hostPath:
+    path: /data/mongodb
+    type: DirectoryOrCreate

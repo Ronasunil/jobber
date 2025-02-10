@@ -1,0 +1,121 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jobber-heartbeat
+  namespace: development
+data:
+  heartbeat.yml: |
+    heartbeat.monitors:
+      - type: http
+        id: jobber-gateway
+        name: jobber gateway api service
+        schedule: "@every 5s"
+        urls: ["http://jobber-gateway.development.svc.cluster.local:2000/gateway-health"]
+        check.request.method: GET
+        check.response.status: [200]
+
+      - type: http
+        id: jobber-app-notification
+        name: jobber app-notification api service
+        schedule: "@every 5s"
+        urls: ["http://jobber-notify.development.svc.cluster.local:2006/app-notification-health"]
+        check.request.method: GET
+        check.response.status: [200]
+
+      - type: http
+        id: jobber-auth
+        name: jobber authentication api service
+        schedule: "@every 5s"
+        urls: ["http://jobber-auth.development.svc.cluster.local:2002/auth-health"]
+        check.request.method: GET
+        check.response.status: [200]
+
+      - type: http
+        id: jobber-chat
+        name: jobber chat api service
+        schedule: "@every 5s"
+        urls: ["http://jobber-chat.development.svc.cluster.local:2005/chat-health"]
+        check.request.method: GET
+        check.response.status: [200]
+
+      - type: http
+        id: jobber-gig
+        name: jobber gig api service
+        schedule: "@every 5s"
+        urls: ["http://jobber-gig.development.svc.cluster.local:2004/gig-health"]
+        check.request.method: GET
+        check.response.status: [200]
+
+      - type: http
+        id: jobber-notification
+        name: jobber notiffication api service
+        schedule: "@every 5s"
+        urls: ["http://jobber-notification.development.svc.cluster.local:2001/notification-health"]
+        check.request.method: GET
+        check.response.status: [200]
+
+      - type: http
+        id: jobber-order
+        name: jobber order api service
+        schedule: "@every 5s"
+        urls: ["http://jobber-order.development.svc.cluster.local:2007/order-health"]
+        check.request.method: GET
+        check.response.status: [200]
+
+      - type: http
+        id: jobber-review
+        name: jobber review api service
+        schedule: "@every 5s"
+        urls: ["http://jobber-review.development.svc.cluster.local:2008/review-health"]
+        check.request.method: GET
+        check.response.status: [200]
+
+      - type: http
+        id: jobber-user
+        name: jobber user api service
+        schedule: "@every 5s"
+        urls: ["http://jobber-user.development.svc.cluster.local:2003/user-health"]
+        check.request.method: GET
+        check.response.status: [200]
+
+    output.elasticsearch:
+      hosts: ['http://jobber-elastic.development.svc.cluster.local:9200']
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobber-heartbeat
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: jobber-heartbeat
+  template:
+    metadata:
+      labels:
+        app: jobber-heartbeat
+    spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: jobber-heartbeat
+      containers:
+        - name: heartbeat
+          image: docker.elastic.co/beats/heartbeat:8.17.1
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            capabilities:
+              add: [NET_RAW]
+          resources:
+            limits:
+              memory: "900Mi"
+              cpu: "800m"
+            requests:
+              memory: "700Mi"
+              cpu: "550m"
+          volumeMounts:
+            - name: config-volume
+              mountPath: "/usr/share/heartbeat/heartbeat.yml"
+              subPath: "heartbeat.yml"

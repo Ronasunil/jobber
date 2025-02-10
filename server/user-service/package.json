@@ -4,8 +4,8 @@
   "main": "app.js",
   "scripts": {
     "start:dev": "nodemon -r tsconfig-paths/register src/app.ts ",
-    "build": "tsc && tsc-alias -p tsconfig.json && cp -r src/config.env build/",
-    "start": "pm2 start build/app.js --i 5 --attach",
+    "build": "tsc && tsc-alias -p tsconfig.json && cp  src/config.env build/",
+    "start": "pm2 start build/app.js -i 5 --attach",
     "stop": "pm2 stop all",
     "delete": "pm2 delete all"
   },

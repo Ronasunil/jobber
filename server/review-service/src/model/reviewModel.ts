@@ -65,7 +65,7 @@ export class Review extends Model {
   review!: string;
 
   @AllowNull(false)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   rating!: number;
 
   @AllowNull(true)

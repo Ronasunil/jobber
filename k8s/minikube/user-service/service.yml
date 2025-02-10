@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jobber-user
+  namespace: development
+spec:
+  selector:
+    app: jobber-user
+  ports:
+    - name: user
+      port: 2003
+      targetPort: 2003

@@ -11,5 +11,9 @@ const logger = winstonLogger(
 export const chatSocketListner = function (io: SocketServer) {
   io.on("connection", (socket: Socket) => {
     logger.info("chat socket connected successfully chat service");
+
+    socket.on("disconnect", (reason) => {
+      logger.info(`Socket disconnected: ${reason}`);
+    });
   });
 };

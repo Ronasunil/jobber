@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jobber-rabbitmq
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: jobber-rabbitmq
+  serviceName: jobber-rabbitmq
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jobber-rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:4.1-rc-management-alpine
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: "jobber-user"
+            - name: RABBITMQ_DEFAULT_PASS
+              value: "jobber-pass"
+          ports:
+            - name: amqp
+              containerPort: 5672
+            - name: mngmnt
+              containerPort: 15672
+          volumeMounts:
+            - name: rabbitmq-data
+              mountPath: /var/lib/rabbitmq
+          resources:
+            limits:
+              cpu: "650m"
+              memory: "850Mi"
+            requests:
+              cpu: "350m"
+              memory: "500Mi"
+  volumeClaimTemplates:
+    - metadata:
+        name: rabbitmq-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "local-storage-rabbitmq"
+        resources:
+          requests:
+            storage: 4Gi

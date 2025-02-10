@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jobber-redis
+  namespace: development
+spec:
+  selector:
+    app: jobber-redis
+  ports:
+    - protocol: TCP
+      name: redis-port
+      port: 6379
+      targetPort: 6379

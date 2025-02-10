@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jobber-mysql
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: jobber-mysql
+  serviceName: jobber-mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jobber-mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "jobber"
+            - name: MYSQL_DATABASE
+              value: "jobber_app"
+            - name: MYSQL_USER
+              value: "jobber"
+            - name: MYSQL_PASSWORD
+              value: "jobber"
+          ports:
+            - name: mysql
+              containerPort: 3306
+          resources:
+            limits:
+              cpu: "750m"
+              memory: "1Gi"
+            requests:
+              cpu: "400m"
+              memory: "800Mi"
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "local-storage-mysql"
+        resources:
+          requests:
+            storage: 3Gi

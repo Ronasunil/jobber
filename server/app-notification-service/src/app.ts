@@ -15,7 +15,6 @@ const globalMiddlewares = function (app: Application) {
 };
 
 const corsMiddlewares = function (app: Application) {
-  app.set("trust proxy", 1);
   app.use(
     cors({
       credentials: true,
@@ -31,6 +30,7 @@ const securityMiddlewares = function (app: Application) {
 };
 
 const middlewares = function (app: Application) {
+  app.set("trust proxy", 1);
   corsMiddlewares(app);
   securityMiddlewares(app);
   globalMiddlewares(app);

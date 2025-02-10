@@ -1,24 +1,27 @@
-FROM node:alpine:3.20 as build
+FROM node:22-alpine3.20 as build
 WORKDIR /app
 
-COPY src ./src
+COPY src/ ./src
 COPY package.json ./
-COPY tsconfig.json ./
 COPY .npmrc ./
-RUN touch package.json && \
-    sed -i 's/"@Ronasunil/jobber-shared"/"@ronasunil/jobber-shared"/g' package.json
+COPY tsconfig.json ./
+
+RUN sed -i 's/"npm:@Ronasunil\/jobber-shared@/\"npm:@ronasunil\/jobber-shared@/g' package.json
+RUN npm install -g npm@11.0.0
+RUN npm i && npm i tsc -g
 
 RUN npm run build
 
-FROM node:alpine:3.20
+FROM node:22-alpine3.20
 WORKDIR /app
 
+COPY ./src ./src
 COPY --from=build /app/build ./build
 COPY --from=build /app/package.json ./
-COPY --from=build /app/src ./src
+COPY --from=build /app/.npmrc ./
 
-RUN npm install --only=production && npm i -g pm2
+RUN npm i --omit=dev && npm i -g pm2
 
-EXPOSE  2002
+EXPOSE 2002
 
 CMD [ "npm", "start" ]

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobber-chat
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobber-chat
+  template:
+    metadata:
+      labels:
+        app: jobber-chat
+    spec:
+      containers:
+        - name: chat
+          image: ronasunil/jobber-chat:latest
+          env:
+            - name: PORT
+              value: ""
+            - name: ELASTIC_SEARCH_ENDPOINT
+              value: ""
+            - name: API_GATEWAY_ENDPOINT
+              value: ""
+            - name: MONGO_DB_ENDPOINT
+              value: ""
+            - name: RABBITMQ_ENDPOINT
+              value: ""
+            - name: REDIS_ENDPOINT
+              value: ""
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "250m"
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+          ports:
+            - name: chat
+              containerPort: 2005

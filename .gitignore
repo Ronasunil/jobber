@@ -149,3 +149,8 @@ data
 server/jobber-shared
 build
 *.env
+
+*.yaml
+
+
+

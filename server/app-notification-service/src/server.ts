@@ -34,7 +34,7 @@ const startServer = function (app: Application) {
 };
 
 const socketConnection = function (server: Server) {
-  const io = new SocketServer(server, {
+  const io: SocketServer = new SocketServer(server, {
     cors: {
       methods: ["GET", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
       origin: config.API_GATEWAY_ENDPOINT!,
