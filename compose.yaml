@@ -335,11 +335,22 @@ services:
       - /proc:/hostfs/proc:ro
       - /:/hostfs:ro
     command: metricbeat -e -E output.elasticsearch.hosts=["http://elasticsearch_container:9200"]
-
     networks:
       - app-network
       - elk-network
       - rabbitmq-network
+
+  jenkins:
+    container_name: jenkins_container
+    image: jenkins/jenkins
+    restart: always
+    user: root
+    privileged: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data/jenkins/jenkins_config:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
 
 networks:
   elk-network:
