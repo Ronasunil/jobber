@@ -152,5 +152,7 @@ build
 
 *.yaml
 
+.npmrc
+
 
 
