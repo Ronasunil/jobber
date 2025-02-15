@@ -342,16 +342,24 @@ services:
 
   jenkins:
     container_name: jenkins_container
-    image: jenkins/jenkins
+    image: jenkins/jenkins:lts
     restart: always
     user: root
     privileged: true
     ports:
-      - "8080:8080"
+      - "5050:8080"
     volumes:
       - ./data/jenkins/jenkins_config:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
 
+  jenkins-agent:
+    container_name: jenkins_agent_container
+    image: ronasunil/jenkins_agent
+    restart: always
+    user: root
+    privileged: true
+    expose:
+      - 22
 networks:
   elk-network:
     driver: bridge
