@@ -68,7 +68,6 @@ pipeline {
 
                     changedServices.each { srv, changed ->
                         if (changed) {
-                            parallelStages[srv] = {
 
                                 sh """
                                     cd server/${srv}-service/
@@ -76,13 +75,9 @@ pipeline {
                                     docker build -t ronasunil/jobber-${srv} .
                                     docker push ronasunil/jobber-${srv}
                                 """
-                            }
                         }
                     }
 
-                    if (!parallelStages.isEmpty()) {
-                        parallel parallelStages
-                    }
                 }
             }
         }
