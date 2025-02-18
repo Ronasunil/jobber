@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobber-gateway
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobber-gateway
+  template:
+    metadata:
+      labels:
+        app: jobber-gateway
+    spec:
+      containers:
+        - name: gateway
+          image: ronasunil/jobber-gateway:latest
+
+          env:
+            - name: PORT
+              value: "2000"
+            - name: ELASTIC_SEARCH_ENDPOINT
+              value: "http://jobber-elastic.development.svc.cluster.local:9200"
+            - name: NODE_ENV
+              value: "development"
+            - name: COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jobber-secret
+                  key: cookie_secret
+            - name: CLIENT_URL
+              value: "http://localhost:5173"
+            - name: API_GATEWAY_HEADER
+              valueFrom:
+                secretKeyRef:
+                  name: jobber-secret
+                  key: api_gateway_header
+            - name: JWT_SECRET
+              value: "pzfHGlWkWDDvComxj8M9J6cfCn2tlIjB"
+            - name: AUTH_SERVICE_URL
+              value: "http://jobber-auth.development.svc.cluster.local:2002"
+            - name: USER_SERVICE_URL
+              value: "http://jobber-user.development.svc.cluster.local:2003"
+            - name: GIG_SERVICE_URL
+              value: "http://jobber-gig.development.svc.cluster.local:2004"
+            - name: CHAT_SERVICE_URL
+              value: "http://jobber-chat.development.svc.cluster.local:2005"
+            - name: APP_NOTIFICATION_SERVICE_URL
+              value: "http://jobber-app-notification.development.svc.cluster.local:2006"
+            - name: APP_NOTIFICATION_WS_URL
+              value: "ws://jobber-app-notification.development.svc.cluster.local:2006"
+            - name: ORDER_SERVICE_URL
+              value: "http://jobber-order.development.svc.cluster.local:2007"
+            - name: CHAT_WS_URL
+              value: "ws://jobber-chat.development.svc.cluster.local:2005"
+            - name: REVIEW_SERVICE_URL
+              value: "http://jobber-review.development.svc.cluster.local:2008"
+            - name: REDIS_HOST
+              value: "redis://jobber-redis.development.svc.cluster.local:6379"
+          resources:
+            limits:
+              cpu: "850m"
+              memory: "1Gi"
+            requests:
+              cpu: "500m"
+              memory: "700Mi"
+
+          ports:
+            - name: gateway
+              containerPort: 2000

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobber-review
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobber-review
+  template:
+    metadata:
+      labels:
+        app: jobber-review
+    spec:
+      containers:
+        - name: review
+          image: ronasunil/jobber-review:latest
+          env:
+            - name: PORT
+              value: "2008"
+            - name: ELASTIC_SEARCH_ENDPOINT
+              value: "http://jobber-elastic.development.svc.cluster.local:9200"
+            - name: API_GATEWAY_ENDPOINT
+              value: "http://jobber-gateway.development.svc.cluster.local:2000"
+            - name: MYSQL_DB_ENDPOINT
+              value: "mysql://root:jobber@jobber-mysql.development.svc.cluster.local:3306/jobber_app"
+            - name: RABBITMQ_ENDPOINT
+              value: "amqp://jobber-user:jobber-pass@jobber-rabbitmq.development.svc.cluster.local:5672"
+          resources:
+            limits:
+              memory: "600Mi"
+              cpu: "1"
+            requests:
+              memory: "550Mi"
+              cpu: "300m"
+          ports:
+            - name: review
+              containerPort: 2008
