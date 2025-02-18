@@ -27,7 +27,7 @@ const httpServer = function (app: Application): Server {
 const startServer = function (app: Application) {
   const server = httpServer(app);
   server.listen(config.PORT, () => {
-    logger.info("Notification service server started23");
+    logger.info("Notification service server started234");
   });
 };
 
