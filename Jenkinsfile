@@ -1,3 +1,6 @@
+def changedServices = [:]
+def changedK8s = [:]
+
 pipeline {
     agent {
         label "agent"
@@ -13,9 +16,6 @@ pipeline {
         dockerTool "Docker"
     }
 
-    // Define global variables
-    def changedServices = [:]
-    def changedK8s = [:]
 
     stages {
         stage("Clean workspace") {
