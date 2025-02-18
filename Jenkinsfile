@@ -69,16 +69,13 @@ pipeline {
                     changedServices.each { srv, changed ->
                         if (changed) {
                             parallelStages[srv] = {
-                                stage("Build and push ${srv} service") {
-                                    steps {
-                                        sh """
-                                            cd server/${srv}-service/
-                                            docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}
-                                            docker build -t ronasunil/jobber-${srv} .
-                                            docker push ronasunil/jobber-${srv}
-                                        """
-                                    }
-                                }
+
+                                sh """
+                                    cd server/${srv}-service/
+                                    docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}
+                                    docker build -t ronasunil/jobber-${srv} .
+                                    docker push ronasunil/jobber-${srv}
+                                """
                             }
                         }
                     }
