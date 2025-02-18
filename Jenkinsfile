@@ -1,5 +1,7 @@
-def changedServices = [:]
-def changedK8s = [:]
+import groovy.transform.Field
+
+@Field def changedServices = [:]
+@Field def changedK8s = [:]
 
 pipeline {
     agent {
@@ -15,7 +17,6 @@ pipeline {
     tools {
         dockerTool "Docker"
     }
-
 
     stages {
         stage("Clean workspace") {
