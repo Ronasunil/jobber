@@ -43,7 +43,7 @@ pipeline{
 
         stage("Detect changed k8s folder") {
             steps{
-                scripts {
+                script {
                     // k8s/minikube/monitors/heartbeat.yml
                     def kubernetes = ["api-gateway-service", "app-notification-service", "auth-service", "chat-service", "elasticsearch", "gig-service", "heartbeat", "kibana", "metricbeat", "mongodb", "mysql", "notification-service", "order-service", "rabbitmq", "redis", "review-service", "secrets", "user-service"];
                     def changedFiles = sh(script: 'git diff --name-only ~HEAD-1', returnStdout: true).trim()
