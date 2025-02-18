@@ -1,4 +1,4 @@
-
+import groovy.json.JsonSlurperClassic 
 
 pipeline {
     agent {
@@ -64,7 +64,7 @@ pipeline {
             steps {
                 script {
                     def parallelStages = [:]
-                    def changedServices = readJSON(text: env.CHANGED_SERVICES)
+                    def changedServices = new groovy.json.JsonSlurperClassic().parseText(env.CHANGED_SERVICES)
 
                     changedServices.each { srv, changed ->
                         if (changed == "true") {
