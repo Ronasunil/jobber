@@ -5,7 +5,13 @@ pipeline{
 
     environment {
         DOCKER_CRED = credentials("docker")
+        K8S_SERVER = "https://192.168.39.236:8443" 
+        K8S_TOKEN = credentials("k8sToken")
 
+    }
+
+    tools{
+        docker "Docker"
     }
 
     stages{
@@ -80,16 +86,27 @@ pipeline{
 
         }
 
-        stage("Deploy changes to k8s service") {
+        stage("Deploy changes to k8s ") {
             steps{
                 script{
                     def services = ["auth", "chat", "api-gateway", "gig", "notification", "order", "review", "user"]
+                    def kubernetesServices = ["api-gateway-service", "app-notification-service", "auth-service", "chat-service", "elasticsearch", "gig-service", "heartbeat", "kibana", "metricbeat", "mongodb", "mysql", "notification-service", "order-service", "rabbitmq", "redis", "review-service", "secrets", "user-service"];
 
+                    //  Applying changes to  k8s service like deployment statefulset etc...
+                    kubernetesServices.each{k8s -> 
+                        if(env[k8s.toUpperCase()] == "true") {  
+                                sh """ 
+                                    cd  k8s/minikube/${k8s}/
+                                    kubectl --insecure-skip-tls-verify --token=${K8S_TOKEN} --server=${K8S_SERVER} apply -f .
+                                    """
+                        }
+                    }
+                    // Applying changes to service if any updation amde to k8s file directly
                     services.each{srv ->
                         if(env[srv.toUpperCase()] === "true") {
                             sh """ 
                                 cd k8s/minikube/${srv}
-                                kubectl apply -f .
+                                kubectl --insecure-skip-tls-verify --token=${K8S_TOKEN} --server=${K8S_SERVER} apply -f .
                                 """
                         }
                     }
@@ -99,23 +116,28 @@ pipeline{
             }
         }
 
-        stage("Deploy changes to k8s statefulSet, deployments, services and others") {
-            steps{
-def services = ["auth", "chat", "api-gateway", "gig", "notification", "order", "review", "user"]
-                script{
-                    def kubernetesServices = ["api-gateway-service", "app-notification-service", "auth-service", "chat-service", "elasticsearch", "gig-service", "heartbeat", "kibana", "metricbeat", "mongodb", "mysql", "notification-service", "order-service", "rabbitmq", "redis", "review-service", "secrets", "user-service"];
+    }
 
-                    kubernetesServices.each{k8s -> 
-                        if(env[statefulSet.toUpperCase()] == "true") {  
-                                sh """ 
-                                    cd  k8s/minikube/${k8s}/
-                                    kubectl apply -f .
-                                    """
-                        }
-                    }
-                }
-
+    post{
+        success {
+            script{
+               def name = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
+               def msg = "${name} just deployed a succesfull build ✅ More details:${env.BUILD_URL}"
+               slackSend(channel: '#jenkins', color: 'good', message: msg)
             }
+            
+        }
+        failure {
+            script {
+                def name = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
+                def msg = "🚨 *Build Alert!*   Uh-oh! ${name}'s latest build has failed ❌ "
+                
+                slackSend(channel: '#jenkins', color: 'danger', message: msg)
+            }
+        }
+
+        error {
+            slackSend(channel: '#jenkins', color: 'warning', message: '⚠️ Build encountered an error! Investigate Jenkins logs')
         }
     }
 }
