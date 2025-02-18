@@ -46,7 +46,7 @@ pipeline{
                 script {
                     // k8s/minikube/monitors/heartbeat.yml
                     def kubernetes = ["api-gateway-service", "app-notification-service", "auth-service", "chat-service", "elasticsearch", "gig-service", "heartbeat", "kibana", "metricbeat", "mongodb", "mysql", "notification-service", "order-service", "rabbitmq", "redis", "review-service", "secrets", "user-service"];
-                    def changedFiles = sh(script: 'git diff --name-only ~HEAD-1', returnStdout: true).trim()
+                    def changedFiles = sh(script: 'git diff --name-only HEAD~1', returnStdout: true).trim()
 
                     kubernetes.each{k8s ->
                         env[k8s.toUpperCase()] =  changedFiles.contains("k8s/minikube/${k8s}/") ? "true" : "false"
@@ -68,7 +68,7 @@ pipeline{
                                     stage("Build and push ${srv} service") {
                                         steps{
                                             sh """cd server/${srv}-service/
-                                                  docker login -u ${DOCKER_CRED_USR} -password ${DOCKER_CRED_PSW}
+                                                  docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}
                                                   docker build -t ronasunil/jobber-${srv} .
                                                   docker push ronasunil/jobber-${srv}   
                                                 """                                       
@@ -103,7 +103,7 @@ pipeline{
                     }
                     // Applying changes to service if any updation amde to k8s file directly
                     services.each{srv ->
-                        if(env[srv.toUpperCase()] === "true") {
+                        if(env[srv.toUpperCase()] == "true") {
                             sh """ 
                                 cd k8s/minikube/${srv}
                                 kubectl --insecure-skip-tls-verify --token=${K8S_TOKEN} --server=${K8S_SERVER} apply -f .
