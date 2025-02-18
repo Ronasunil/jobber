@@ -1,5 +1,3 @@
-import groovy.json.JsonSlurperClassic 
-
 pipeline {
     agent {
         label "agent"
@@ -14,6 +12,10 @@ pipeline {
     tools {
         dockerTool "Docker"
     }
+
+    // Define global variables
+    def changedServices = [:]
+    def changedK8s = [:]
 
     stages {
         stage("Clean workspace") {
@@ -34,12 +36,11 @@ pipeline {
                     def services = ["auth", "chat", "api-gateway", "app-notification", "gig", "notification", "order", "review", "user"]
                     def changedFiles = sh(script: 'git diff --name-only HEAD~1', returnStdout: true).trim()
 
-                    def changedServices = [:]
                     services.each { srv ->
-                        changedServices[srv] = changedFiles.contains("server/${srv}-service/") ? "true" : "false"
+                        if (changedFiles.contains("server/${srv}-service/")) {
+                            changedServices[srv] = true
+                        }
                     }
-
-                    env.CHANGED_SERVICES = groovy.json.JsonOutput.toJson(changedServices)
                 }
             }
         }
@@ -50,12 +51,11 @@ pipeline {
                     def kubernetes = ["api-gateway-service", "app-notification-service", "auth-service", "chat-service", "elasticsearch", "gig-service", "heartbeat", "kibana", "metricbeat", "mongodb", "mysql", "notification-service", "order-service", "rabbitmq", "redis", "review-service", "secrets", "user-service"]
                     def changedFiles = sh(script: 'git diff --name-only HEAD~1', returnStdout: true).trim()
 
-                    def changedK8s = [:]
                     kubernetes.each { k8s ->
-                        changedK8s[k8s] = changedFiles.contains("k8s/minikube/${k8s}/") ? "true" : "false"
+                        if (changedFiles.contains("k8s/minikube/${k8s}/")) {
+                            changedK8s[k8s] = true
+                        }
                     }
-
-                    env.CHANGED_K8S = groovy.json.JsonOutput.toJson(changedK8s)
                 }
             }
         }
@@ -64,10 +64,9 @@ pipeline {
             steps {
                 script {
                     def parallelStages = [:]
-                    def changedServices = new groovy.json.JsonSlurperClassic().parseText(env.CHANGED_SERVICES)
 
                     changedServices.each { srv, changed ->
-                        if (changed == "true") {
+                        if (changed) {
                             parallelStages[srv] = {
                                 stage("Build and push ${srv} service") {
                                     steps {
@@ -93,10 +92,8 @@ pipeline {
         stage("Deploy changes to k8s") {
             steps {
                 script {
-                    def changedK8s = new groovy.json.JsonSlurper().parseText(env.CHANGED_K8S)
-
                     changedK8s.each { k8s, changed ->
-                        if (changed == "true") {
+                        if (changed) {
                             sh """
                                 cd k8s/minikube/${k8s}/
                                 kubectl --insecure-skip-tls-verify --token=${K8S_TOKEN} --server=${K8S_SERVER} apply -f .
@@ -125,5 +122,3 @@ pipeline {
         }
     }
 }
-
-
