@@ -11,7 +11,7 @@ pipeline{
     }
 
     tools{
-        docker "Docker"
+        dockerTool "Docker"
     }
 
     stages{
@@ -136,9 +136,6 @@ pipeline{
             }
         }
 
-        error {
-            slackSend(channel: '#jenkins', color: 'warning', message: '⚠️ Build encountered an error! Investigate Jenkins logs')
-        }
     }
 }
 
