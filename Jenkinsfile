@@ -78,9 +78,9 @@ pipeline {
                         if (changed) {
 
                                 sh """
-                                    cd server/${srv}-service/
-                                    ls
+                                    cd server/${srv}-service/src
                                     curl ${envUrls[srv]} > config.env
+                                    cd ..
                                     docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}
                                     docker build --build-arg NPM_TOKEN=${NPM_TOKEN} -t ronasunil/jobber-${srv} .
                                     docker push ronasunil/jobber-${srv}
