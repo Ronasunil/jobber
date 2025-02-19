@@ -3,6 +3,7 @@ WORKDIR /app
 
 COPY src/ ./src
 COPY package.json ./
+COPY package.lock.json ./
 ARG NPM_TOKEN
 RUN echo "@ronasunil:registry=https://npm.pkg.github.com" > .npmrc \
     && echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}" >> .npmrc
