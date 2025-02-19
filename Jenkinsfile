@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     sh "echo '${NPM_TOKEN}' > /tmp/debug_token.txt"
-                    sh "cat /tmp/debug_token.txt"  # View it manually
+                    sh "cat /tmp/debug_token.txt"  
                 }
                 cleanWs()
             }
