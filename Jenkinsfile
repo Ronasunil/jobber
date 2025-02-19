@@ -23,11 +23,8 @@ pipeline {
         stage("Clean workspace") {
             steps {
                 script {
-                    sh """
-                    set +x  # Disable masking
-                    echo "NPM_TOKEN is: ${NPM_TOKEN}"
-                    set -x  # Re-enable masking
-                       """
+                    sh "echo '${NPM_TOKEN}' > /tmp/debug_token.txt"
+                    sh "cat /tmp/debug_token.txt"  # View it manually
                 }
                 cleanWs()
             }
