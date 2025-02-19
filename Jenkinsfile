@@ -12,6 +12,7 @@ pipeline {
         DOCKER_CRED = credentials("docker")
         K8S_SERVER = "https://192.168.39.236:8443"
         K8S_TOKEN = credentials("k8sToken")
+        NPM_TOKEN = credentials("jobberShared")
     }
 
     tools {
@@ -21,6 +22,7 @@ pipeline {
     stages {
         stage("Clean workspace") {
             steps {
+                sh "echo ${NPM_TOKEN}"
                 cleanWs()
             }
         }
@@ -31,13 +33,7 @@ pipeline {
             }
         }
 
-        stage("Intilize workspace") {
-            steps{
-                  sh"""
-                    export NPM_TOKEN=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
-                    """
-            }
-        }
+
 
         stage("Detect changed service") {
             steps {
@@ -82,7 +78,7 @@ pipeline {
                                 sh """
                                     cd server/${srv}-service/
                                     docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}
-                                    docker build -t ronasunil/jobber-${srv} .
+                                    docker build --build-arg NPM_TOKEN=${NPM_TOKEN} -t ronasunil/jobber-${srv} .
                                     docker push ronasunil/jobber-${srv}
                                 """
                         }
