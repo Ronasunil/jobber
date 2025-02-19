@@ -5,7 +5,7 @@
   "scripts": {
     "start:dev": "nodemon -r tsconfig-paths/register src/app.ts",
     "build": "tsc  && tsc-alias -p tsconfig.json && cp  src/config.env build/ && cp -r src/queues/emails  build/queues",
-    "start": "pm2 start build/app.js -i 5 --attach",
+    "start": "pm2 start build/app.js -i 5",
     "stop": "pm2 stop all",
     "delete": "pm2 delete all"
   },
