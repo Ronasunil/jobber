@@ -1,9 +1,11 @@
-FROM node:22-alpine3.20 as build
+FROM node:22-alpine3.20 AS build
 WORKDIR /app
 
 COPY src/ ./src
 COPY package.json ./
-COPY .npmrc ./
+ARG NPM_TOKEN
+RUN echo "@ronasunil:registry=https://npm.pkg.github.com" > .npmrc \
+    && echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}" >> .npmrc
 COPY tsconfig.json ./
 
 RUN sed -i 's/"npm:@Ronasunil\/jobber-shared@/\"npm:@ronasunil\/jobber-shared@/g' package.json
