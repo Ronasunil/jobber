@@ -22,7 +22,7 @@ pipeline {
     stages {
         stage("Clean workspace") {
             steps {
-                sh "echo ${NPM_TOKEN}"
+                sh "echo \$NPM_TOKEN"
                 cleanWs()
             }
         }
