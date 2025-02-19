@@ -80,6 +80,7 @@ pipeline {
                                 sh """
                                     cd server/${srv}-service/src
                                     curl ${envUrls[srv]} > config.env
+                                    ls
                                     cd ..
                                     docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}
                                     docker build --build-arg NPM_TOKEN=${NPM_TOKEN} -t ronasunil/jobber-${srv} .
