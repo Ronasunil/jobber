@@ -22,10 +22,6 @@ pipeline {
     stages {
         stage("Clean workspace") {
             steps {
-                script {
-                    sh "echo '${NPM_TOKEN}' > /tmp/debug_token.txt"
-                    sh "cat /tmp/debug_token.txt"  
-                }
                 cleanWs()
             }
         }
