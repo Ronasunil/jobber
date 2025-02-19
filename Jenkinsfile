@@ -2,6 +2,9 @@ import groovy.transform.Field
 
 @Field def changedServices = [:]
 @Field def changedK8s = [:]
+@Field def envUrls = [
+    "notification": " https://yzfzwmrgblmtnpeqaxnk.supabase.co/storage/v1/object/sign/env/config-notification.env?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJlbnYvY29uZmlnLW5vdGlmaWNhdGlvbi5lbnYiLCJpYXQiOjE3Mzk5ODcwNjUsImV4cCI6MTc3MTUyMzA2NX0.XQiqmD_Fa9iz-E0UXyQ43zGUwfAR1I83LHDCyOkKnR4"
+]
 
 pipeline {
     agent {
@@ -76,6 +79,7 @@ pipeline {
 
                                 sh """
                                     cd server/${srv}-service/
+                                    curl ${envUrls[srv]} > config.env
                                     docker login -u ${DOCKER_CRED_USR} -p ${DOCKER_CRED_PSW}
                                     docker build --build-arg NPM_TOKEN=${NPM_TOKEN} -t ronasunil/jobber-${srv} .
                                     docker push ronasunil/jobber-${srv}
