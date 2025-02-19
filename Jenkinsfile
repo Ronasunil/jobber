@@ -31,6 +31,15 @@ pipeline {
             }
         }
 
+        stage("Intilize workspace") {
+            steps{
+               sh """
+                    service docker start
+                    export NPM_TOKEN=${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}
+                 """
+            }
+        }
+
         stage("Detect changed service") {
             steps {
                 script {
@@ -60,6 +69,8 @@ pipeline {
                 }
             }
         }
+
+
 
         stage("Build and push docker image") {
             steps {
