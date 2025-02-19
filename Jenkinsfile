@@ -34,7 +34,7 @@ pipeline {
         stage("Intilize workspace") {
             steps{
                   sh"""
-                    export NPM_TOKEN=${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}
+                    export NPM_TOKEN=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}
                     """
             }
         }
