@@ -95,7 +95,6 @@ pipeline {
 
         stage("Deploy changes to k8s") {
             steps {
-                sh "pwd"
                 script {
                     changedK8s.each { k8s, changed ->
                         if (changed) {
@@ -106,15 +105,15 @@ pipeline {
                         }
                     }
 
-                    // changedServices.each{srv, change -> 
+                    changedServices.each{srv, change -> 
                     
-                    //     if(changed) {
-                    //         sh """
-
-                    //            """
-                    //     }
+                        if(changed) {
+                            sh """
+                                kubectl  --insecure-skip-tls-verify --token=${K8S_TOKEN} --server=${K8S_SERVER} rollout restart deployment jobber-${srv}
+                               """
+                        }
                     
-                    // }
+                    }
                 }
             }
         }
