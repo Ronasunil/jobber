@@ -18,7 +18,7 @@ spec:
           image: ronasunil/jobber-notification:latest
           env:
             - name: APM_START
-              value: "0"
+              value: "20"
             - name: ELASTIC_SEARCH_ENDPOINT
               value: "http://jobber-elastic.development.svc.cluster.local:9200"
             - name: RABBITMQ_ENDPOINT
