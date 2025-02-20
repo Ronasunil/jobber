@@ -101,6 +101,7 @@ pipeline {
                             sh """
                                 cd k8s/minikube/${k8s}/
                                 kubectl --insecure-skip-tls-verify --token=${K8S_TOKEN} --server=${K8S_SERVER} apply -f .
+                                kubectl --insecure-skip-tls-verify --token=${K8S_TOKEN} --server=${K8S_SERVER} rollout restart deployment jobber-${srv}
                             """
                         }
                     }
@@ -109,7 +110,7 @@ pipeline {
                     
                         if(changed) {
                             sh """
-                                kubectl  --insecure-skip-tls-verify --token=$K8S_TOKEN --server=${K8S_SERVER} rollout restart deployment jobber-${srv}
+                                kubectl  --insecure-skip-tls-verify --token=${K8S_TOKEN} --server=${K8S_SERVER} rollout restart deployment jobber-${srv}
                                """
                         }
                     
