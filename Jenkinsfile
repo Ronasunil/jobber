@@ -13,7 +13,7 @@ pipeline {
 
     environment {
         DOCKER_CRED = credentials("docker")
-        K8S_SERVER = "https://192.168.39.236:8443"
+        K8S_SERVER = "https://192.168.39.166:8443"
         K8S_TOKEN = credentials("k8sToken")
         NPM_TOKEN = credentials("jobberShared")
     }
@@ -109,7 +109,7 @@ pipeline {
                     
                         if(changed) {
                             sh """
-                                kubectl  --insecure-skip-tls-verify --token=${K8S_TOKEN} --server=${K8S_SERVER} rollout restart deployment jobber-${srv}
+                                kubectl  --insecure-skip-tls-verify --token=$K8S_TOKEN --server=${K8S_SERVER} rollout restart deployment jobber-${srv}
                                """
                         }
                     
