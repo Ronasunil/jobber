@@ -23,6 +23,7 @@ COPY ./src ./src
 COPY --from=build /app/build ./build
 COPY --from=build /app/package.json ./
 COPY --from=build /app/.npmrc ./
+COPY --from=build /app/package-lock.json ./
 
 RUN npm ci --omit=dev 
 RUN npm i -g pm2
