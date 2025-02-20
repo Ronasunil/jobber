@@ -1,4 +1,4 @@
-FROM node:22-alpine3.20 AS build
+FROM node:22-alpine AS build
 WORKDIR /app
 
 COPY src/ ./src
@@ -16,7 +16,7 @@ RUN npm i -g tsc
 
 RUN npm run build
 
-FROM node:22-alpine3.20
+FROM node:22-alpine
 WORKDIR /app
 
 COPY ./src ./src
