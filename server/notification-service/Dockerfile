@@ -27,7 +27,7 @@ COPY --from=build /app/package-lock.json ./
 
 RUN npm ci --omit=dev
 
-RUN npm i -g pm2 --unsafe-perm=true --max_old_space_size=256
+RUN npm i -g pm2 
 
 EXPOSE 2001
 

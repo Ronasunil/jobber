@@ -2,9 +2,7 @@ import groovy.transform.Field
 
 @Field def changedServices = [:]
 @Field def changedK8s = [:]
-@Field def envUrls = [
-    "notification": " https://yzfzwmrgblmtnpeqaxnk.supabase.co/storage/v1/object/sign/env/config-notification.env?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJlbnYvY29uZmlnLW5vdGlmaWNhdGlvbi5lbnYiLCJpYXQiOjE3Mzk5ODcwNjUsImV4cCI6MTc3MTUyMzA2NX0.XQiqmD_Fa9iz-E0UXyQ43zGUwfAR1I83LHDCyOkKnR4"
-]
+@Field def envUrls = [:]
 
 pipeline {
     agent {
@@ -16,6 +14,15 @@ pipeline {
         K8S_SERVER = "https://192.168.39.166:8443"
         K8S_TOKEN = credentials("k8sToken")
         NPM_TOKEN = credentials("jobberShared")
+        NOTIFICATION_ENV_TOKEN = credentials("notificationEnv")
+        REVIEW_ENV_TOKEN = credentials("reviewEnv")
+        GATEWAY_ENV_TOKEN = credentials("gatewayEnv")
+        USER_TOKEN = credentials("userEnv")
+        APP_NOTIFICATION_TOKEN = credentials("appNotifyEnv")
+        AUTH_ENV_TOKEN = credentials("authEnv")
+        ORDER_ENV_TOKEN = credentials("orderEnv")
+        GIG_ENV_TOKEN = credentials("gigEnv")
+        CHAT_ENV_TOKEN = crednetials("chatEnv")
     }
 
     tools {
@@ -27,6 +34,22 @@ pipeline {
             steps {
                 cleanWs()
             }
+        }
+
+        stage("Setup env variables") {
+            //  All these links will remain valid until February 20, 2026
+            envUrls = [
+                "notification": "https://yzfzwmrgblmtnpeqaxnk.supabase.co/storage/v1/object/sign/env/config-notification.env?token=$NOTIFICATION_ENV_TOKEN",
+                "gig" : "https://yzfzwmrgblmtnpeqaxnk.supabase.co/storage/v1/object/sign/env/config-gig.env?token=$GIG_ENV_TOKEN",
+                "chat" : "https://yzfzwmrgblmtnpeqaxnk.supabase.co/storage/v1/object/sign/env/config-chat.env?token=$CHAT_ENV_TOKEN",
+                "order" : "https://yzfzwmrgblmtnpeqaxnk.supabase.co/storage/v1/object/sign/env/config-order.env?token=$ORDER_ENV_TOKEN",
+                "app-notification" : "https://yzfzwmrgblmtnpeqaxnk.supabase.co/storage/v1/object/sign/env/config-app-notify.env?token=$APP_NOTIFICATION_TOKEN",
+                "auth" : "https://yzfzwmrgblmtnpeqaxnk.supabase.co/storage/v1/object/sign/env/config-auth.env?token=$AUTH_ENV_TOKEN",
+                "api-gateway" :"https://yzfzwmrgblmtnpeqaxnk.supabase.co/storage/v1/object/sign/env/config-gateway.env?token=$GATEWAY_ENV_TOKEN",
+                "review" : "https://yzfzwmrgblmtnpeqaxnk.supabase.co/storage/v1/object/sign/env/config-review.env?token=$GATEWAY_ENV_TOKEN"
+                "user" : "https://yzfzwmrgblmtnpeqaxnk.supabase.co/storage/v1/object/sign/env/config-user.env?token=$USER_TOKEN"
+
+            ]
         }
 
         stage("Checkout code") {
@@ -105,14 +128,10 @@ pipeline {
                         }
                     }
 
-                    changedServices.each{srv, change -> 
-                    
+                    changedServices.each{srv, changed -> 
                         if(changed) {
-                            sh """
-                                kubectl  --insecure-skip-tls-verify --token=${K8S_TOKEN} --server=${K8S_SERVER} rollout restart deployment jobber-${srv}
-                               """
-                        }
-                    
+                            def deploymentName = srv == "app-notification" ? jobber-notify : jobber-${srv}
+                            sh "kubectl  --insecure-skip-tls-verify --token=${K8S_TOKEN} --server=${K8S_SERVER} rollout restart deployment ${deploymentName}"
                     }
                 }
             }
