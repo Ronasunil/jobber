@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobber-gig
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobber-gig
+  template:
+    metadata:
+      labels:
+        app: jobber-gig
+    spec:
+      containers:
+        - name: gig
+          image: ronasunil/jobber-gig:latest
+          env:
+            - name: PORT
+              value: "2004"
+            - name: ELASTIC_SEARCH_ENDPOINT
+              value: ""
+            - name: API_GATEWAY_ENDPOINT
+              value: ""
+            - name: MONGO_DB_ENDPOINT
+              value: ""
+            - name: RABBITMQ_ENDPOINT
+              value: ""
+            - name: REDIS_ENDPOINT
+              value: ""
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+            requests:
+              memory: "500Mi"
+              cpu: "250m"
+          ports:
+            - name: gig
+              containerPort: 2004

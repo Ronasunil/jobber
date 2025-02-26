@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobber-gateway
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobber-gateway
+  template:
+    metadata:
+      labels:
+        app: jobber-gateway
+    spec:
+      containers:
+        - name: gateway
+          image: ronasunil/jobber-gateway:latest
+
+          env:
+            - name: PORT
+              value: "2000"
+            - name: ELASTIC_SEARCH_ENDPOINT
+              value: ""
+            - name: NODE_ENV
+              value: ""
+            - name: COOKIE_SECRET
+              value: ""
+            - name: CLIENT_URL
+              value: ""
+            - name: API_GATEWAY_HEADER
+              value: ""
+            - name: JWT_SECRET
+              value: ""
+            - name: AUTH_SERVICE_URL
+              value: ""
+            - name: USER_SERVICE_URL
+              value: ""
+            - name: GIG_SERVICE_URL
+              value: ""
+            - name: CHAT_SERVICE_URL
+              value: ""
+            - name: APP_NOTIFICATION_SERVICE_URL
+              value: ""
+            - name: APP_NOTIFICATION_WS_URL
+              value: ""
+            - name: ORDER_SERVICE_URL
+              value: ""
+            - name: CHAT_WS_URL
+              value: ""
+            - name: REVIEW_SERVICE_URL
+              value: ""
+            - name: REDIS_HOST
+              value: ""
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+            requests:
+              memory: "500Mi"
+              cpu: "250m"
+          ports:
+            - name: gateway
+              containerPort: 2000

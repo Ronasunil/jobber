@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jobber-rabbitmq
+  namespace: development
+spec:
+  selector:
+    app: jobber-rabbitmq
+  ports:
+    - name: amqp
+      port: 5672
+      targetPort: 5672
+    - name: mngmnt
+      port: 15672
+      targetPort: 15672

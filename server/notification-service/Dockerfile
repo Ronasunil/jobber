@@ -4,6 +4,7 @@ WORKDIR /app
 COPY src/ ./src
 COPY package.json ./
 COPY package-lock.json ./
+
 ARG NPM_TOKEN
 RUN echo "@ronasunil:registry=https://npm.pkg.github.com" > .npmrc \
     && echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}" >> .npmrc
@@ -13,7 +14,6 @@ RUN sed -i 's/"npm:@Ronasunil\/jobber-shared@/\"npm:@ronasunil\/jobber-shared@/g
 RUN npm install -g npm@11.0.0
 RUN npm ci
 RUN npm i -g tsc
-
 RUN npm run build
 
 FROM node:22-alpine
@@ -26,7 +26,6 @@ COPY --from=build /app/.npmrc ./
 COPY --from=build /app/package-lock.json ./
 
 RUN npm ci --omit=dev
-
 RUN npm i -g pm2 
 
 EXPOSE 2001

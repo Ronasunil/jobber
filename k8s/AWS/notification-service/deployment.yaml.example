@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobber-notification
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobber-notification
+  template:
+    metadata:
+      labels:
+        app: jobber-notification
+    spec:
+      containers:
+        - name: notification
+          image: ronasunil/jobber-notification:latest
+          env:
+            - name: APM_START
+              value: ""
+            - name: ELASTIC_SEARCH_ENDPOINT
+              value: ""
+            - name: RABBITMQ_ENDPOINT
+              value: ""
+            - name: NODE_ENV
+              value: ""
+            - name: PORT
+              value: ""
+            - name: SENDER_EMAIL
+              value: ""
+            - name: SENDER_PASS
+              value: ""
+            - name: SMTP_PORT
+              value: ""
+            - name: HOST
+              value: ""
+            - name: APP_ICON
+              value: ""
+            - name: CLIENT_URL
+              value: ""
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+            requests:
+              memory: "500Mi"
+              cpu: "250m"
+          ports:
+            - name: notification
+              containerPort: 2001

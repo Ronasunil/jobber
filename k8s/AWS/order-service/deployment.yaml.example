@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobber-order
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobber-order
+      namespace: development
+  template:
+    metadata:
+      labels:
+        app: jobber-order
+    spec:
+      containers:
+        - name: order
+          image: ronasunil/jobber-order:latest
+          env:
+            - name: PORT
+              value: ""
+            - name: ELASTIC_SEARCH_ENDPOINT
+              value: ""
+            - name: API_GATEWAY_ENDPOINT
+              value: ""
+            - name: MONGO_DB_ENDPOINT
+              value: ""
+            - name: RABBITMQ_ENDPOINT
+              value: ""
+            - name: REDIS_ENDPOINT
+              value: ""
+            - name: STRIPE_API_KEY
+              value: ""
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+            requests:
+              memory: "500Mi"
+              cpu: "250m"
+          ports:
+            - name: order
+              containerPort: 2007

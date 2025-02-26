@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobber-gig
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobber-gig
+  template:
+    metadata:
+      labels:
+        app: jobber-gig
+    spec:
+      containers:
+        - name: gig
+          image: ronasunil/jobber-gig:latest
+          env:
+            - name: PORT
+              value: "2004"
+            - name: ELASTIC_SEARCH_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: jobber-secret
+                  key: elastic_cloud_endpoint
+            - name: API_GATEWAY_ENDPOINT
+              value: "http://jobber-gateway.development.svc.cluster.local:2000"
+            - name: MONGO_DB_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: jobber-secret
+                  key: mongodb_endpoint
+            - name: RABBITMQ_ENDPOINT
+              value: "amqp://jobber-user:jobber-pass@jobber-rabbitmq.development.svc.cluster.local:5672"
+            - name: REDIS_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: jobber-secret
+                  key: redis_endpoint
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+            requests:
+              cpu: "400m"
+              memory: "700Mi"
+          ports:
+            - name: gig
+              containerPort: 2004

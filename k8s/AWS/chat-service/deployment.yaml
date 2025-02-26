@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobber-chat
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobber-chat
+  template:
+    metadata:
+      labels:
+        app: jobber-chat
+    spec:
+      containers:
+        - name: chat
+          image: ronasunil/jobber-chat:latest
+          env:
+            - name: PORT
+              value: "2005"
+            - name: ELASTIC_SEARCH_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: jobber-secret
+                  key: elastic_cloud_endpoint
+            - name: API_GATEWAY_ENDPOINT
+              value: "http://jobber-gateway.development.svc.cluster.local:2000"
+            - name: MONGO_DB_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: jobber-secret
+                  key: mongodb_endpoint
+            - name: RABBITMQ_ENDPOINT
+              value: "amqp://jobber-user:jobber-pass@jobber-rabbitmq.development.svc.cluster.local:5672"
+            - name: REDIS_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: jobber-secret
+                  key: redis_endpoint
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+            requests:
+              cpu: "450m"
+              memory: "800Mi"
+
+          ports:
+            - name: chat
+              containerPort: 2005

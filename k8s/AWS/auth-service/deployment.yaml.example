@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobber-auth
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobber-auth
+  template:
+    metadata:
+      labels:
+        app: jobber-auth
+    spec:
+      containers:
+        - name: auth
+          image: onasunil/jobber-auth:latest
+          env:
+            - name: PORT
+              value: "2002"
+            - name: ELASTIC_SEARCH_ENDPOINT
+              value: ""
+            - name: API_GATEWAY_ENDPOINT
+              value: ""
+            - name: MYSQL_DB
+              value: ""
+            - name: RABBITMQ_ENDPOINT
+              value: ""
+            - name: DEFAULT_PROFILE_IMG
+              value: ""
+            - name: JWT_SECRET
+              value: ""
+            - name: APP_ICON
+              value: ""
+            - name: CLIENT_URL
+              value: ""
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+            requests:
+              memory: "200Mi"
+              cpu: "250m"
+          ports:
+            - name: auth
+              containerPort: 2002

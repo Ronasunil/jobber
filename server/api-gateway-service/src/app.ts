@@ -50,7 +50,7 @@ const globalMiddlewares = function (app: Application) {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       secure: config.NODE_ENV === "production",
       keys: [config.COOKIE_SECRET!],
-      // sameSite: "none",
+      sameSite: "none",
     })
   );
 
