@@ -8,7 +8,7 @@ server.port: 5601
 # Elasticsearch Connection
 elasticsearch.hosts: ["http://elasticsearch_container:9200"]
 elasticsearch.username: "kibana_system"
-elasticsearch.password: "Rona@pass1"
+elasticsearch.password: "password_here"
 
 # monitoring.ui.container.elasticsearch.enabled: true
 # xpack.fleet.enabled: true
