@@ -88,6 +88,8 @@ services:
     build:
       context: ./server/notification-service
       dockerfile: Dockerfile
+      args:
+        - NPM_TOKEN=${NPM_TOKEN}
     env_file: "./server/notification-service/src/config.env"
     restart: always
     environment:
@@ -114,6 +116,8 @@ services:
     build:
       context: ./server/api-gateway-service
       dockerfile: Dockerfile
+      args:
+        - NPM_TOKEN=${NPM_TOKEN}
     env_file: ./server/api-gateway-service/src/config.env
     restart: always
     environment:
@@ -148,6 +152,8 @@ services:
     container_name: app_notification_container
     build:
       context: ./server/app-notification-service
+      args:
+        - NPM_TOKEN=${NPM_TOKEN}
       dockerfile: Dockerfile
     env_file: ./server/app-notification-service/src/config.env
     restart: always
@@ -172,6 +178,8 @@ services:
     container_name: auth_container
     build:
       context: ./server/auth-service/
+      args:
+        - NPM_TOKEN=${NPM_TOKEN}
       dockerfile: Dockerfile
     env_file: ./server/auth-service/src/config.env
     restart: always
@@ -197,8 +205,11 @@ services:
     container_name: chat_container
     build:
       context: ./server/chat-service
+      args:
+        - NPM_TOKEN=${NPM_TOKEN}
       dockerfile: Dockerfile
     env_file: ./server/chat-service/src/config.env
+
     restart: always
     environment:
       - PORT=2005
@@ -220,6 +231,8 @@ services:
     container_name: gig_container
     build:
       context: ./server/gig-service/
+      args:
+        - NPM_TOKEN=${NPM_TOKEN}
       dockerfile: Dockerfile
     env_file: ./server/gig-service/src/config.env
     restart: always
@@ -243,6 +256,8 @@ services:
     container_name: order_container
     build:
       context: ./server/order-service
+      args:
+        - NPM_TOKEN=${NPM_TOKEN}
       dockerfile: Dockerfile
     env_file: ./server/order-service/src/config.env
     restart: always
@@ -267,6 +282,8 @@ services:
     container_name: review_container
     build:
       context: ./server/review-service
+      args:
+        - NPM_TOKEN=${NPM_TOKEN}
       dockerfile: Dockerfile
     env_file: ./server/review-service/src/config.env
     restart: always
@@ -288,6 +305,8 @@ services:
     container_name: user_container
     build:
       context: ./server/user-service
+      args:
+        - NPM_TOKEN=${NPM_TOKEN}
       dockerfile: Dockerfile
     env_file: ./server/user-service/src/config.env
     restart: always

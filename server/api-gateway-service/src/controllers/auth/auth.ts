@@ -21,32 +21,6 @@ const logger = winstonLogger(
   "info"
 );
 
-const asyncWrapper = function asyncWrapper(
-  fn: (req: Request, res: Response) => Promise<AxiosResponse>
-): (req: Request, res: Response) => Promise<void> {
-  return async function (req: Request, res: Response) {
-    try {
-      const response = await fn(req, res);
-
-      res.status(response.status).json({
-        message: response.data?.message || "",
-        status: response.data?.status,
-      });
-    } catch (error: any) {
-      console.log(error.response);
-      if (error.response.data) {
-        throw new Error(
-          error.response?.data[0]?.message ||
-            `Unexpected error:${
-              error.response.data?.message || "Unknown error"
-            }`
-        );
-      }
-      throw new Error("Error communicating with AuthService");
-    }
-  };
-};
-
 export const signupGateway = helpers.asyncWrapper(async function (
   req: Request,
   _res: Response

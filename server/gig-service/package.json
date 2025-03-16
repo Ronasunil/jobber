@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.17.0",
-    "@ronasunil/jobber-shared": "npm:@Ronasunil/jobber-shared@^1.4.4",
+    "@ronasunil/jobber-shared": "npm:@ronasunil/jobber-shared@^1.4.4",
     "amqplib": "^0.10.5",
     "cloudinary": "^2.5.1",
     "compression": "^1.7.5",
